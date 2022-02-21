@@ -1,0 +1,29 @@
+image: node:latest
+
+before_script:
+  - echo "Start Automated Build"
+  
+pages: 
+  cache:
+    paths:
+      - node_modules/
+  
+  stage: deploy
+  script:
+    - npm install -g @angular/cli
+    - npm install
+    - mkdir dist
+    - ng build --base-href /millestone_ii/
+    - mkdir public
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
+    - pages
+  tags:
+    - ci
+    - node
+
+after_script:
+  - echo "End Automated Build"

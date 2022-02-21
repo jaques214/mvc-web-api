@@ -1,0 +1,87 @@
+<mat-card class="card" >
+  <mat-card-header>
+    <mat-card-title>Events</mat-card-title>
+    <mat-card-subtitle>{{title}}</mat-card-subtitle>
+  </mat-card-header>
+  <img *ngIf="event" src="{{imageFieldPath}}" alt="poster">
+  <form (ngSubmit)="onSubmit()" >
+  <mat-card-content>
+    <div *ngFor="let field of formFields.inputs">
+      <app-shared-field-form *ngIf="field.type != 'complex'" [input]='field'></app-shared-field-form>
+      <ng-template [ngIf]="field.type == 'complex'">
+        <div *ngFor="let input of field.inputs" >
+          <app-shared-field-form [input]='input'></app-shared-field-form>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="demo-button-container">
+      <button mat-raised-button (click)="addSession()" class="demo-button" type="button">
+        <span>
+          Add Session
+        </span>
+        <mat-icon>calendar_today</mat-icon>
+      </button>
+      <button
+          mat-raised-button
+          type="button"
+          [disabled]="!sessions.length"
+          (click)="removeSession()"
+          class="demo-button">
+        Remove Session
+      </button>
+    </div>
+
+    <table mat-table [dataSource]="sessions" class="demo-table">
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          Selected
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selectionToggle(element) : null"
+                        [checked]="selection.has(element)"
+                        [aria-label]="checkboxLabel(element)">
+          </mat-checkbox>
+        </td>
+      </ng-container>
+     
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">{{element.date}}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef>Start</th>
+        <td mat-cell *matCellDef="let element">{{element.startTime}}</td>
+      </ng-container>
+    
+      <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef>End</th>
+        <td mat-cell *matCellDef="let element">{{element.endTime}}</td>
+      </ng-container>
+    
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsSessions"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumnsSessions;"> </tr>
+    </table>
+
+    <div class="file-upload">
+      <input [hidden]="true" type="file" name="poster" (change)="onFileSelected($event)" #fileUpload />
+      {{this.fileSelected?.name || event?.poster?.name || imageFieldName || "No file uploaded yet."}}
+      <button mat-mini-fab color="primary" class="upload-btn" type="button"
+        (click)="fileUpload.click()">
+          <mat-icon>attach_file</mat-icon>
+      </button>
+    </div>
+
+    
+  </mat-card-content>
+  <mat-card-actions class="card-actions">
+    <div class="container">
+    <button mat-button [routerLink]="['/dashboard/events']"><mat-icon  aria-hidden="false" aria-label="arrow back ios icon">arrow_back_ios</mat-icon></button>
+    </div>
+    <button *ngIf="event" mat-raised-button color="secundary" type="button" (click)="onDelete()">Delete</button>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </mat-card-actions>
+  </form>
+</mat-card>

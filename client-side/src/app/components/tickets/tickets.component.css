@@ -1,0 +1,20 @@
+.mat-stepper-horizontal {
+    margin-top: 8px;
+  }
+  
+  .mat-form-field {
+    margin-top: 16px;
+  }
+
+  .demo-table {
+    width: 100%;
+  }
+  
+  h2 {
+    color: white;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }

@@ -1,0 +1,38 @@
+.example-full-width {
+  width: 100%;
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  background: none;
+  cursor: pointer;
+}
+input[type="time"] {
+  position: relative;
+  z-index: 1;
+  height: 27px;
+}
+
+input + label {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 0;
+  font-size: 0;
+}
+
+span {
+  position: relative;
+}
+
+.timeRange{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.timeInput {
+  min-width: 70px;
+}
+
+.timeDelimiter{
+  margin: 0 15px;
+}

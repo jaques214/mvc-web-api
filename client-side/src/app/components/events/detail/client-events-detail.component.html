@@ -1,0 +1,47 @@
+<mat-card class="card">
+  <mat-card-header >
+      <mat-card-subtitle>
+        <button mat-button [routerLink]="['/events']" [ngClass]="'title-go-back'">
+          <mat-icon aria-hidden="false" aria-label="arrow back ios icon"
+            >arrow_back_ios</mat-icon
+          >Events
+        </button>
+      </mat-card-subtitle>
+    <mat-card-title [ngClass]="'event-title'">{{ event?.title }}</mat-card-title>
+  </mat-card-header>
+  <img *ngIf="event" src="{{ imageFieldPath }}" alt="poster" />
+  <mat-card-content>
+    <div class="content">
+        <p>
+            <span class='content-label'>
+                Description:
+            </span>
+            <span class='content-body'>
+                {{event.description}}
+            </span>
+        </p>
+    </div>
+    <table mat-table [dataSource]="sessions" class="demo-table">
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef>Date</th>
+        <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="startTime">
+        <th mat-header-cell *matHeaderCellDef>Start</th>
+        <td mat-cell *matCellDef="let element">{{ element.startTime }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="endTime">
+        <th mat-header-cell *matHeaderCellDef>End</th>
+        <td mat-cell *matCellDef="let element">{{ element.endTime }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsSessions"></tr>
+      <tr
+        mat-row
+        *matRowDef="let element; columns: displayedColumnsSessions"
+      ></tr>
+    </table>
+  </mat-card-content>
+</mat-card>

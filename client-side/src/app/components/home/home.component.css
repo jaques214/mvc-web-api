@@ -1,0 +1,43 @@
+:host{
+    display: block;
+}
+.welcome {
+    height: calc( 100vh - 64px );
+    background: url("https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fd49r1np2lhhxv.cloudfront.net%2Fwww%2Fadmin%2Fuploads%2Fimages%2Frock-in-rio.jpg&f=1&nofb=1") no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+.welcome h1{
+    font-size: 40px;
+    background: rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 20px 0px black;
+    padding: 1px;
+}
+
+.highlights{
+    padding: 20px 10px;
+}
+
+.highlights h2{
+    text-align: center;
+    color:white;
+    margin-bottom: 20px;
+}
+
+.highlights-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+.highlights-content > * {
+    margin: 5px;
+    max-width: 300px;
+}

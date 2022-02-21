@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 5% 0;
+}
+
+.card {
+  width: 70%;
+  min-width: 320px;
+  max-width: 1080px;
+  height: 100%;
+}
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.card img {
+  width: 100%;
+}
+.file-upload {
+  display: block;
+}
+
+.example-full-width {
+  width: 100%;
+}
+
+.poster {
+  width: 200px;
+  height: auto;
+}
+
+mat-card-header {
+  margin-bottom: 10px;
+}
+
+.demo-table {
+  width: 100%;
+}
+
+.demo-button-container {
+  padding-bottom: 16px;
+}
+
+.demo-button + .demo-button {
+  margin-left: 8px;
+}

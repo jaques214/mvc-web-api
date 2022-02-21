@@ -1,0 +1,26 @@
+<mat-card class="card" >
+  <mat-card-header>
+    <mat-card-title>{{collection}}</mat-card-title>
+    <mat-card-subtitle>{{title}}</mat-card-subtitle>
+  </mat-card-header>
+  <form (ngSubmit)="onSubmit()" >
+  <mat-card-content>
+    <div *ngFor="let field of formFields.inputs">
+      <app-shared-field-form *ngIf="field.type != 'complex'" [input]='field'></app-shared-field-form>
+      <ng-template [ngIf]="field.type == 'complex'">
+        <div *ngFor="let input of field.inputs" >
+          <app-shared-field-form [input]='input'></app-shared-field-form>
+        </div>
+      </ng-template>
+    </div>
+    
+  </mat-card-content>
+  <mat-card-actions class="card-actions">
+    <div class="container">
+    <button mat-button [routerLink]="['/dashboard/showrooms']"><mat-icon  aria-hidden="false" aria-label="arrow back ios icon">arrow_back_ios</mat-icon></button>
+    </div>
+    <button *ngIf="showroom" mat-raised-button color="secundary" type="button" (click)="onDelete()">Delete</button>
+    <button mat-raised-button color="primary" type="submit">Submit</button>
+  </mat-card-actions>
+  </form>
+</mat-card>

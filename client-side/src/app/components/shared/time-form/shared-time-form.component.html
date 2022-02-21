@@ -1,0 +1,39 @@
+<mat-form-field *ngIf="range" appearance="fill" class="example-full-width">
+  <mat-label>{{ timeFields.label }}</mat-label>
+  <div [ngClass]="'timeRange'">
+    <span [ngClass]="'timeInput'">
+      <input id="timeStart" matInput type="time" placeholder="{{ timeFields.placeholder }}" name="{{ timeFields.name }}"
+      [(ngModel)]="timeFields.inputs[0].model" />
+      <label for="timeStart">
+        <mat-icon aria-hidden="false" aria-label="" matSuffix>
+          access_time
+        </mat-icon>
+      </label>
+    </span>
+    <span [ngClass]="'timeDelimiter'">
+      <mat-icon>remove</mat-icon>
+    </span>
+    <span [ngClass]="'timeInput'">
+      <input id="timeEnd" matInput type="time" placeholder="{{ timeFields.placeholder }}" name="{{ timeFields.name }}"
+      [(ngModel)]="timeFields.inputs[1].model"/>
+      <label for="timeEnd">
+        <mat-icon aria-hidden="false" aria-label="" matSuffix>
+          access_time
+        </mat-icon>
+      </label>
+    </span>
+  </div>
+</mat-form-field>
+
+<mat-form-field *ngIf="!range" appearance="fill" class="example-full-width">
+  <mat-label>{{ timeFields.label }}</mat-label>
+  <div [ngClass]="'timeInput'">
+    <input id="timeStart" matInput type="time" placeholder="{{ timeFields.placeholder }}" name="{{ timeFields.name }}"
+    [(ngModel)]="timeFields.model" />
+    <label for="timeStart">
+      <mat-icon aria-hidden="false" aria-label="" matSuffix>
+        access_time
+      </mat-icon>
+    </label>
+  </div>
+</mat-form-field>

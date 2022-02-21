@@ -1,0 +1,10 @@
+:host{
+  width: 100%;
+}
+
+footer {
+  font-size: 12px;
+  padding: 12px;
+  background-color: #e91e63;
+  color: #fff;
+}

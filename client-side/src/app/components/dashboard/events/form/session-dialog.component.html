@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Session</h1>
+<div mat-dialog-content>
+  <div *ngFor="let field of formFields.inputs">
+    <app-shared-field-form *ngIf="field.type != 'complex'" [input]='field'></app-shared-field-form>
+    <ng-template [ngIf]="field.type == 'complex'">
+      <div *ngFor="let input of field.inputs" >
+        <app-shared-field-form [input]='input'></app-shared-field-form>
+      </div>
+    </ng-template>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" mat-dialog-close (click)="onConfirm()">Add</button>
+  <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
+</div>

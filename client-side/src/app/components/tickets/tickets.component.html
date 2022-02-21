@@ -1,0 +1,98 @@
+<section>
+  <div>
+    <h2>Sessions</h2>
+    <table mat-table [dataSource]="sessions" class="demo-table">
+      <ng-container
+        matColumnDef="{{ column }}"
+        *ngFor="let column of columnsToDisplay"
+      >
+        <th mat-header-cell *matHeaderCellDef>
+          {{ columnsToDisplayHeaders[column] }}
+        </th>
+        <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
+    </table>
+  </div>
+</section>
+
+<mat-horizontal-stepper [linear]="true" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Select a session</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Choose a Session</mat-label>
+        <mat-select formControlName="session" required>
+          <mat-option>None</mat-option>
+          <mat-option
+            *ngFor="let session of sessions"
+            [value]="session.optionValue"
+          >
+            {{ session.viewValue }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="firstFormGroup.get('session')?.hasError('required')"
+          >Please choose a Session</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Covid Test Result</mat-label>
+        <input matInput type="text" formControlName="covidTest" readonly />
+        <mat-error *ngIf="firstFormGroup.get('covidTest')?.hasError('required')"
+          >Please provide a Covid Test</mat-error
+        >
+      </mat-form-field>
+      <div class="file-upload">
+        <input
+          [hidden]="true"
+          type="file"
+          (change)="onFileSelected($event)"
+          #fileUpload
+        />
+        <button
+          mat-mini-fab
+          color="primary"
+          class="upload-btn"
+          type="button"
+          (click)="fileUpload.click()"
+        >
+          <mat-icon>attach_file</mat-icon>
+        </button>
+      </div>
+
+      <div>
+        <button mat-button matStepperNext color="primary">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="secondFormGroup" >
+    <ng-template matStepLabel>Fill out the details</ng-template>
+    <form [formGroup]="secondFormGroup">
+      <mat-form-field>
+        <mat-label>how many tickets</mat-label>
+        <input
+          matInput
+          type="number"
+          formControlName="quantity"
+          required
+        />
+      </mat-form-field>
+      <div>
+        <button mat-button matStepperPrevious color="secundary">Back</button>
+        <button mat-button matStepperNext color="primary">Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Done</ng-template>
+    <p>Confirm you purchase</p>
+    <div>
+      <button mat-button matStepperPrevious color="secundary">Back</button>
+      <button mat-button (click)="onBuy()" color="primary">
+        purchase
+      </button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
