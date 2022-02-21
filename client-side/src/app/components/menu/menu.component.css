@@ -1,0 +1,13 @@
+:host{
+  width: 100%;
+}
+
+.example-icon {
+  font-size: 35px;
+  padding: 0 14px;
+  width: auto;
+  height: auto;
+}
+.example-spacer {
+  flex: 1 1 auto;
+}

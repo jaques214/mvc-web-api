@@ -1,0 +1,15 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <button [routerLink]="['/']" mat-button>Home</button>
+    <button [routerLink]="['/about']" mat-button>About</button>
+    <button [routerLink]="['/events']" mat-button>Events</button>
+    <button *ngIf="this.user?.role?.value && this.user?.role?.value !== 'Client'" [routerLink]="['/dashboard']" mat-button>Dashboard</button>
+    <span class="example-spacer"></span>
+    
+    <button mat-button (click)="openDialog()">
+      <span>{{username()}}</span>  
+      <mat-icon class="example-icon" aria-hidden="false" aria-label="account circle icon">account_circle</mat-icon>
+    </button>
+  
+  </mat-toolbar-row>
+</mat-toolbar>

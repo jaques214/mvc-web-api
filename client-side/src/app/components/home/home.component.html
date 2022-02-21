@@ -1,0 +1,38 @@
+<section class='welcome'>
+  <h1>Programação em Ambiente Web</h1>
+</section>
+<section class='highlights'>
+  <h2>Featured</h2>
+  <div class="highlights-content">
+    <div *ngFor="let highlight of (highlights$ | async)">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>{{highlight.title}}</mat-card-title>
+          <mat-card-subtitle>{{highlight.showroom.name}}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="{{highlight.imageFieldPath}}" alt="poster">
+        <mat-card-content>
+          <p>
+            {{highlight.description}}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>Comprar</button>
+          <button mat-button>info</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</section>
+<section>
+  <!-- <google-chart #chart
+   [title]="title"
+   [type]="type"
+   [data]="data"
+   [columnNames]="columnNames"
+   [options]="options"
+   [width]="width"
+   [height]="height">
+</google-chart> -->
+</section>

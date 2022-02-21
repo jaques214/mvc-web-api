@@ -1,0 +1,29 @@
+<ng-container [ngSwitch]="type">
+
+  <ng-template [ngSwitchCase]="'date'">
+    <app-shared-date-form [dateFields]='input'></app-shared-date-form>
+  </ng-template>
+
+  <ng-template [ngSwitchCase]="'date-range'">
+    <app-shared-date-form [dateFields]='input' [range]="true" ></app-shared-date-form>
+  </ng-template>
+
+  <ng-template [ngSwitchCase]="'time'">
+    <app-shared-time-form [timeFields]='input'></app-shared-time-form>
+  </ng-template>
+
+  <ng-template [ngSwitchCase]="'time-range'">
+    <app-shared-time-form [timeFields]='input' [range]="true" ></app-shared-time-form>
+  </ng-template>
+
+  <ng-template [ngSwitchDefault]>
+    <mat-form-field appearance="fill" class="example-full-width">
+      <mat-label>{{ input.label }}</mat-label>
+      <input matInput type="{{ input.type }}" placeholder="{{ input.placeholder }}" name="{{ input.name }}"
+        [(ngModel)]="input.model" />
+      <mat-icon aria-hidden="false" aria-label="" matSuffix>
+        {{ input.icon }}
+      </mat-icon>
+    </mat-form-field>
+  </ng-template>
+</ng-container>

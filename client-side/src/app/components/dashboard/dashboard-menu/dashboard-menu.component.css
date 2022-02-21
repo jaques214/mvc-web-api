@@ -1,0 +1,28 @@
+.highlights{
+    padding: 20px 10px;
+}
+
+.highlights h2{
+    text-align: center;
+    color:white;
+    margin-bottom: 20px;
+}
+
+.highlights-content :hover {
+    background: transparent;
+}
+
+.highlights-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 1000px;
+}
+
+.highlights-content > * {
+    margin: 5px;
+    max-width: 300px;
+}
