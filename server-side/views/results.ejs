@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p><%= description %></p>
+    <div style='display: flex;'>
+      <form action="" method="POST" style="margin-right: 10px;" enctype="multipart/form-data">
+        <% for(let input of inputs){ %>
+        <p>
+          <label for=""></label>
+          <input
+            type="<%= input.type %>"
+            name="<%= input.name %>"
+            placeholder="<%= input.placeholder %>"
+          />
+        </p>
+        <% } %>
+        <% if(inputs.length > 0) { %>
+          <p>
+            <button type="submit">submit</button>
+          </p>
+        <% } %>
+      </form>
+     
+      <% if(results.length > 0) { %>
+      <table>
+        <thead>
+          <% for(let key of keys){ %>
+          <th><%= key %></th>
+          <% } %>
+          <th colspan="2"></th>
+        </thead>
+        <tbody>
+          <% for(let data of results){ %>
+          <tr>
+            <% for(let key of keys){ %>
+            <td><%= data[key] %></td>
+            <% } %>
+            <td><a href="">Delete</a></td>
+            <td><a href="">Update</a></td>
+          </tr>
+          <% } %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
+  </body>
+</html>
