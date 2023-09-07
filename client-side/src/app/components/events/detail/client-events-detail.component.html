@@ -1,25 +1,23 @@
 <mat-card class="card">
-  <mat-card-header >
-      <mat-card-subtitle>
-        <button mat-button [routerLink]="['/events']" [ngClass]="'title-go-back'">
-          <mat-icon aria-hidden="false" aria-label="arrow back ios icon"
-            >arrow_back_ios</mat-icon
-          >Events
-        </button>
-      </mat-card-subtitle>
-    <mat-card-title [ngClass]="'event-title'">{{ event?.title }}</mat-card-title>
+  <mat-card-header>
+    <mat-card-subtitle>
+      <button mat-button [routerLink]="['/events']" [ngClass]="'title-go-back'">
+        <mat-icon aria-hidden="false" aria-label="arrow back ios icon"
+          >arrow_back_ios</mat-icon
+        >Events
+      </button>
+    </mat-card-subtitle>
+    <mat-card-title [ngClass]="'event-title'">{{ event.title }}</mat-card-title>
   </mat-card-header>
   <img *ngIf="event" src="{{ imageFieldPath }}" alt="poster" />
   <mat-card-content>
     <div class="content">
-        <p>
-            <span class='content-label'>
-                Description:
-            </span>
-            <span class='content-body'>
-                {{event.description}}
-            </span>
-        </p>
+      <p>
+        <span class="content-label"> Description: </span>
+        <span class="content-body">
+          {{ event.description }}
+        </span>
+      </p>
     </div>
     <table mat-table [dataSource]="sessions" class="demo-table">
       <ng-container matColumnDef="date">
