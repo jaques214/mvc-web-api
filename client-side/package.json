@@ -2,13 +2,12 @@
   "name": "millestone-ii",
   "version": "0.0.0",
   "scripts": {
-    "postinstall": "ngcc",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -28,13 +27,15 @@
     "@fortawesome/free-regular-svg-icons": "^5.15.3",
     "@fortawesome/free-solid-svg-icons": "^5.15.3",
     "angular-google-charts": "^2.2.2",
+    "eslint": "^8.48.0",
     "rxjs": "^6.6.7",
+    "ts-node": "^10.9.1",
     "tslib": "^2.2.0",
-    "zone.js": "~0.11.4"
+    "zone.js": "^0.13.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^12.0.4",
-    "@angular/cli": "^12.0.4",
+    "@angular/cli": "^12.2.18",
     "@angular/compiler-cli": "^12.0.4",
     "@types/jasmine": "^3.7.7",
     "@types/node": "^15.12.2",
@@ -47,8 +48,6 @@
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "^1.6.0",
     "protractor": "~7.0.0",
-    "ts-node": "~9.1.1",
-    "tslint": "~6.1.0",
     "typescript": "~4.2.4"
   }
 }
