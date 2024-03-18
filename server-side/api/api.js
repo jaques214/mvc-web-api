@@ -5,6 +5,7 @@ import permissions from "../utils/permissionsLevel.js";
 import { checkPermissionLevel, requireAuth } from "./auth.js";
 import authController, { auth } from "../controllers/auth.js";
 import Showroom from "../models/showrooms.js";
+import Address from "../models/address.js";
 
 const api = express.Router();
 
@@ -27,7 +28,7 @@ const userController =  async (req, res, next) => {
   const { body } = req;
   try {
     
-    const address = await Address.findOne({street:body.address});
+    const address = await Address.findOne({street: {$eq: body.address}});
     if(address){
       body.address = address;
     } else {
@@ -59,7 +60,7 @@ const eventController =  async (req, res, next) => {
   if(body.tickets){
     body.tickets = body._id ? JSON.parse(body.tickets) : [];
   }
-  const showroom = await Showroom.findOne({name:body.showroom});
+  const showroom = await Showroom.findOne({name: { $eq: body.showroom}});
   if(showroom){
     body.showroom = showroom;
   } else {

@@ -8,12 +8,12 @@ class AuthController {
 
   register(req, res) {
     const { username, password } = req.body;
-    if (username == "") {
+    if (username === "") {
       res.sendStatus(400);
       return;
     }
 
-    User.findOne({ username }, function (err, user) {
+    User.findOne({$eq: {username}}, function (err, user) {
       if (user) {
         res.status(400).send("That User is already registered!");
         return;
@@ -49,7 +49,7 @@ class AuthController {
 
   login(req, res) {
     const { username, password } = req.body;
-    User.findOne({ username }, function (err, user) {
+    User.findOne({ $eq: { username }}, function (err, user) {
       if (err) return res.status(500).send("Error on the server.");
       const errorMessage = "Incorrect Username or Password!";
       if (!user) return res.status(401).send(errorMessage);
