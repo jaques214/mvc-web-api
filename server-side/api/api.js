@@ -6,6 +6,7 @@ import { checkPermissionLevel, requireAuth } from "./auth.js";
 import authController, { auth } from "../controllers/auth.js";
 import Showroom from "../models/showrooms.js";
 import Address from "../models/address.js";
+import rateLimitMiddleware from "../utils/rateLimit.js";
 
 const api = express.Router();
 
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-api.use(auth.verifySession);
+api.use(rateLimitMiddleware, auth.verifySession);
 
 api.use("/auth", authController);
 

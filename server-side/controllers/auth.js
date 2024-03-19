@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import config from "../jwt_secret/config.js";
 import User from "../models/users.js";
 import express from "express";
+import rateLimitMiddleware from "../utils/rateLimit.js";
 const authController = express.Router();
 class AuthController {
 
@@ -64,7 +65,7 @@ class AuthController {
       // return the information including token as JSON
       res.status(200).json({...user.toObject(), token});
     } catch (err) {
-      res.status(500).send(err + "Error on the server.");
+      res.status(500).send("Error on the server.");
     }
   }
 
@@ -93,6 +94,6 @@ class AuthController {
 
 export const auth = new AuthController();
 authController.post("/register", auth.register);
-authController.post("/login", auth.login);
-authController.get("/logout", auth.logout);
+authController.post("/login", rateLimitMiddleware, auth.login);
+authController.get("/logout", rateLimitMiddleware, auth.logout);
 export default authController;
