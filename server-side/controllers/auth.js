@@ -51,6 +51,10 @@ class AuthController {
   async login(req, res) {
     const {username, password} = req.body;
     try {
+      if (typeof username !== "string") {
+        res.status(400).json({ status: "error" });
+        return;
+      }
       const user = await User.findOne({username});
       const errorMessage = "Incorrect Username or Password!";
       if (!user) return res.status(401).send(errorMessage);
