@@ -4,7 +4,7 @@ export function requireAuth(req, res, next){
   } else {
     res.sendStatus(401);
   }
-};
+}
 
 export function checkPermissionLevel(level){
   return function(req, res, next){

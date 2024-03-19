@@ -47,10 +47,10 @@ class AuthController {
     });
   }
 
-  login(req, res) {
-    const { username, password } = req.body;
-    User.findOne({ $eq: { username }}, function (err, user) {
-      if (err) return res.status(500).send("Error on the server.");
+  async login(req, res) {
+    const {username, password} = req.body;
+    try {
+      const user = await User.findOne({username});
       const errorMessage = "Incorrect Username or Password!";
       if (!user) return res.status(401).send(errorMessage);
       // check if the password is valid
@@ -58,12 +58,14 @@ class AuthController {
       if (!passwordIsValid) return res.status(401).send(errorMessage);
       // if user is found and password is valid
       // create a token
-      const token = jwt.sign({ user }, config.secret, {
+      const token = jwt.sign({user}, config.secret, {
         expiresIn: 86400, // expires in 24 hours
       });
       // return the information including token as JSON
-      res.status(200).json({ ...user.toObject(), token });
-    });
+      res.status(200).json({...user.toObject(), token});
+    } catch (err) {
+      res.status(500).send(err + "Error on the server.");
+    }
   }
 
   logout(req, res) {

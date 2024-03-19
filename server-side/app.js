@@ -31,6 +31,7 @@ try {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  console.info("DB connected successfully")
 } catch (error) {
   console.error(error + '\nFailed connecting to DB!');
 }

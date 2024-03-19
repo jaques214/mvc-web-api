@@ -19,7 +19,8 @@ export async function postData(req, api){
       form.append(key, req.body[key]);
     }
     form.append('covidTest',  fs.createReadStream('./views_uploads/covidTest.txt'));
-    const formPromise = new Promise((resolve, reject) => {
+
+    return new Promise((resolve, reject) => {
       form.submit('http://localhost:3000/api/' + api, (err, res) => {
         if(err){
           return reject(err);
@@ -27,7 +28,6 @@ export async function postData(req, api){
         resolve(res);
       });
     })
-    return formPromise;
   }
   return fetch('http://localhost:3000/api/' + api, {
     headers: {
