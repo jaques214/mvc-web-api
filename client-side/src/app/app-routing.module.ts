@@ -1,19 +1,19 @@
-import { TicketsComponent } from './components/tickets/tickets.component';
-import { DashboardMenuComponent } from './components/dashboard/dashboard-menu/dashboard-menu.component';
-import { ClientEventsListComponent } from './components/events/list/client-events-list.component';
-import { ListEventsComponent } from './components/dashboard/events/list/events-list.component';
-import { FormEventsComponent } from './components/dashboard/events/form/events-form.component';
-import { ListShowroomsComponent } from './components/dashboard/showrooms/list/showrooms-list.component';
-import { FormShowroomsComponent } from './components/dashboard/showrooms/form/showrooms-form.component';
-import { ListUsersComponent } from './components/dashboard/users/list/users-list.component';
-import { FormUsersComponent } from './components/dashboard/users/form/users-form.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ErrorComponent } from './components/error/error.component';
-import { HomeComponent } from './components/home/home.component';
-import { AuthGuardService } from './services/auth-guard.service';
-import { AboutComponent } from './components/about/about.component';
-import { ClientEventsDetailComponent } from './components/events/detail/client-events-detail.component';
+import { TicketsComponent } from '@components/tickets/tickets.component';
+import { DashboardMenuComponent } from '@components/dashboard/dashboard-menu/dashboard-menu.component';
+import { ClientEventsListComponent } from '@components/events/list/client-events-list.component';
+import { ListEventsComponent } from '@components/dashboard/events/list/events-list.component';
+import { FormEventsComponent } from '@components/dashboard/events/form/events-form.component';
+import { ListShowroomsComponent } from '@components/dashboard/showrooms/list/showrooms-list.component';
+import { FormShowroomsComponent } from '@components/dashboard/showrooms/form/showrooms-form.component';
+import { ListUsersComponent } from '@components/dashboard/users/list/users-list.component';
+import { FormUsersComponent } from '@components/dashboard/users/form/users-form.component';
+import { ErrorComponent } from '@components/error/error.component';
+import { HomeComponent } from '@components/home/home.component';
+import { AboutComponent } from '@components/about/about.component';
+import { ClientEventsDetailComponent } from '@components/events/detail/client-events-detail.component';
+import { AuthGuardService } from '@services/auth-guard.service';
 
 const routes: Routes = [
   {
