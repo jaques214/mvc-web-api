@@ -1,13 +1,11 @@
 import fileSystem from 'fs';
-import path from "path";
 
 import DB from "./db.js";
 import escape from 'escape-html';
+import sanitize from "sanitize-filename"
 
 const fs = fileSystem.promises;
 export const KEY = "id";
-
-const ROOT = "/uploads";
 
 export default function factoryController(schema) {
     return {
@@ -26,15 +24,7 @@ export default function factoryController(schema) {
                 const file = req.file;
                 if (file) {
                     console.log("File is: ", file)
-                    let filepath = file.path
-                    console.log(filepath)
-                    filepath = fs.realpath(path.resolve(ROOT, filepath));
-                    console.log(filepath)
-                    if (!filepath.startsWith(ROOT)) {
-                        res.statusCode = 403;
-                        res.end();
-                        return;
-                    }
+                    let filepath = sanitize(file.path)
                     const data = await fs.readFile(filepath);
                     await fs.writeFile('./' + filepath, data);
                     delete body._id
@@ -57,8 +47,8 @@ export default function factoryController(schema) {
             try {
                 const file = req.file;
                 if (file) {
-                    const data = await fs.readFile(file.path);
-                    await fs.writeFile('./' + file.path, data);
+                    const data = await fs.readFile(sanitize(file.path));
+                    await fs.writeFile('./' + sanitize(file.path), data);
                     delete body._id
                     await DB.update(schema, {...body, poster: file.filename}, req.params[KEY])
                 } else {
