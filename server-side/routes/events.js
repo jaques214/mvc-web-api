@@ -1,8 +1,3 @@
-import template from '../utils/viewTemplate.js';
-import {getData, postData, getAuthTokenFromRequest} from '../utils/routesHelpers.js';
-import express from 'express';
-const router = express.Router();
-
 const eventInfo = {
   title: 'Events', 
   description: 'list of all events', 
@@ -38,12 +33,4 @@ const eventInfo = {
   keys: ['name', 'description', 'showrooms', 'promoter']
 }
 
-router.get('/', async function(req, res, next) {
-  template(res, eventInfo, await getData('events', getAuthTokenFromRequest(req)));
-});
-router.post('/', async function(req, res, next) {
-  await postData(req, 'events');
-  template(res, eventInfo, await getData('events', getAuthTokenFromRequest(req)));
-});
-
-export default router;
+export default eventInfo;

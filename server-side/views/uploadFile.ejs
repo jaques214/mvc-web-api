@@ -8,8 +8,10 @@
 </head>
 <body>
     <form action="/fileupload" method="POST" enctype="multipart/form-data">
-        <input type="text" name="name" placeholder="name">
-        <input type="file" name="covidTest" placeholder="covidTest" size="50"/>
+        <label for="name"></label>
+        <input type="text" name="name" id="name" placeholder="name">
+        <label for="covidTest"></label>
+        <input type="file" name="covidTest" id="covidTest" placeholder="covidTest" size="50"/>
         <br />
         <button type="submit">submit</button>
       </form>
