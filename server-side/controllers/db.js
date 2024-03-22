@@ -38,7 +38,7 @@ class mongoDB {
     }
     async update(schemaName, body, key) {
         let schema = this.collection(schemaName);
-        await schema.findByIdAndUpdate(key, {$set: body}, (err)=>{
+        await schema.findByIdAndUpdate(key, body, (err)=>{
             if (err){
                 console.log('Erro a gravar', err);
             } else {

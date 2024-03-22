@@ -8,22 +8,22 @@ import Showroom from "../models/showrooms.js";
 import Address from "../models/address.js";
 import rateLimitMiddleware from "../utils/rateLimit.js";
 
-const api = express.Router();
+let app = express();
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads");
   },
-  filename: function (req, file, cb, poster) {
+  filename: function (req, file, cb) {
     cb(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
 
-api.use(rateLimitMiddleware, auth.verifySession);
+app.use(rateLimitMiddleware, auth.verifySession);
 
-api.use("/auth", authController);
+app.use("/auth", authController);
 
 const userController =  async (req, res, next) => {
   const { body } = req;
@@ -42,7 +42,7 @@ const userController =  async (req, res, next) => {
   return next()
 }
 
-api.use(
+app.use(
   "/users",
   factoryCrudRouter("users", {
     delete: [requireAuth, userController],
@@ -74,7 +74,7 @@ const eventController =  async (req, res, next) => {
   return next()
 }
 
-api.use(
+app.use(
   "/events",
   factoryCrudRouter("events", {
     remove: [requireAuth],
@@ -83,7 +83,7 @@ api.use(
   })
 );
 
-api.use(
+app.use(
   "/showrooms",
   factoryCrudRouter("showrooms", {
     remove: [requireAuth],
@@ -91,7 +91,7 @@ api.use(
     update: [requireAuth],
   })
 );
-api.use(
+app.use(
   "/tickets",
   factoryCrudRouter("tickets", {
     remove: [requireAuth, checkPermissionLevel(permissions.promoter)],
@@ -100,4 +100,4 @@ api.use(
   })
 );
 
-export default api;
+export default app;

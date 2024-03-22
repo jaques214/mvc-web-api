@@ -5,7 +5,7 @@ import User from "../models/users.js";
 import express from "express";
 import rateLimitMiddleware from "../utils/rateLimit.js";
 
-const authController = express.Router();
+const authController = express();
 
 class AuthController {
 
