@@ -8,10 +8,6 @@
     margin-bottom: 20px;
 }
 
-.highlights-content :hover {
-    background: transparent;
-}
-
 .highlights-content {
     display: flex;
     flex-wrap: wrap;

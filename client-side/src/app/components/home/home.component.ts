@@ -3,8 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Event } from '@models/events';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { normalizeImageName } from '@shared/utils';
 import { API_ENDPOINT } from '@shared/index';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
     ['Chrome', 12.8],
     ['Safari', 8.5],
     ['Opera', 6.2],
-    ['Others', 0.7] 
+    ['Others', 0.7]
  ];
  columnNames = ['Browser', 'Percentage'];
  options = {
@@ -34,7 +34,7 @@ export class HomeComponent implements OnInit {
 width = 550;
 height = 400;
 
-  constructor(private restService: RestService) { }
+  constructor(private restService: RestService, private router: Router) { }
 
   ngOnInit(): void {
     this.getEvents();
@@ -43,7 +43,7 @@ height = 400;
   getEvents(): void {
     this.data$ = this.restService
       .getAllCollections<Event>(this.collection)
-    
+
     this.highlights$ = this.data$.pipe(map(events => {
       return events.filter((event:Event) => {
         const image = (event?.poster as unknown as string);
@@ -52,7 +52,23 @@ height = 400;
       })
     }))
 
-    
+
+  }
+
+  onView(event:any) {
+    this.router.navigate(['/events/detail/' + event._id], {
+      state: {
+        event,
+      },
+    });
+  }
+
+  onBuy(event:any) {
+    this.router.navigate(['/ticket'], {
+      state: {
+        event,
+      },
+    });
   }
 
 }
