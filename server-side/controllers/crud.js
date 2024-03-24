@@ -50,9 +50,9 @@ export default function factoryController(schema) {
                     const data = await fs.readFile(sanitize(file.path));
                     await fs.writeFile('./' + sanitize(file.path), data);
                     delete body._id
-                    await DB.update(schema, {...body, poster: file.filename}, req.params[KEY])
+                    await DB.update(schema, {$set: {...body, poster: {$eq: file.filename}}}, req.params[KEY])
                 } else {
-                    await DB.update(schema, body, req.params[KEY]);
+                    await DB.update(schema, {$set: body}, req.params[KEY]);
                 }
 
                 res.sendStatus(204);
