@@ -28,5 +28,5 @@ export const usersInfo = {
     type: 'file',
     placeholder:'covidTest'
   }],
-  keys: ['id', 'username', 'email', 'covidTest']
+  keys: ['id', 'username', 'email', 'role', 'covidTest']
 }

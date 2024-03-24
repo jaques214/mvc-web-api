@@ -67,7 +67,16 @@ app.get('/users', async function(req, res, next) {
     return;
   }
   const jsonData = response.status === 200 ? await response.json() : {};
-  template(res, usersInfo, jsonData);
+  let count = 1;
+  const results = jsonData.map((user) => {
+    return {
+      id: count++,
+      email: '-',
+      role: user.role.value,
+      ...user,
+    }
+  })
+  template(res, usersInfo, results);
 });
 app.post('/users', upload.single('covidTest'), async function(req, res, next) {
   await postData(req, 'users')
@@ -79,7 +88,14 @@ app.post('/users', upload.single('covidTest'), async function(req, res, next) {
 app.get('/events', async function(req, res, next) {
   const response = await getData('events', getAuthTokenFromRequest(req))
   const jsonData = response.status === 200 ? await response.json() : {};
-  template(res, eventInfo, jsonData);
+  const results = jsonData.map((event) => {
+    return {
+      ...event,
+      showroom: event.showroom.name,
+      sessions: event.sessions.length
+    }
+  })
+  template(res, eventInfo, results);
 });
 
 app.post('/events', async function(req, res, next) {
@@ -104,7 +120,13 @@ app.post('/promoters', async function(req, res, next) {
 app.get('/showrooms', async function(req, res, next) {
   const response = await getData('showrooms', getAuthTokenFromRequest(req))
   const jsonData = response.status === 200 ? await response.json() : {};
-  template(res, showroomsInfo, jsonData);
+  const results = jsonData.map((showroom) => {
+    return {
+      ...showroom,
+      address: `${showroom.address.street}, nº ${showroom.address.number}, ${showroom.address.postalCode}, ${showroom.address.country}`,
+    }
+  })
+  template(res, showroomsInfo, results);
 });
 app.post('/showrooms', async function(req, res, next) {
   await postData(req, 'showrooms');

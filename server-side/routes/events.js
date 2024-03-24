@@ -30,7 +30,7 @@ const eventInfo = {
     type: 'text',
     placeholder:'promoter'
   }],
-  keys: ['name', 'description', 'showrooms', 'promoter']
+  keys: ['poster', 'title', 'description', 'showroom', 'promoter', "saleStartDate", "saleEndDate", 'price', 'minimumAge', 'sessions']
 }
 
 export default eventInfo;
