@@ -1,5 +1,4 @@
-import { API_ENDPOINT, ANGULAR_ENDPOINT } from '@shared/index';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Showroom } from '@models/showrooms';
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,7 +27,7 @@ export class FormShowroomsComponent implements OnInit{
   }
 
   populateForm(){
-    //if an showroom already exists populates the formFields inputs.
+    //if a showroom already exists populates the formFields inputs.
     this.formFields.inputs.forEach((input:any) => {
       input.model! = (this.showroom as any)[input.name!];
       if(input.name == 'address'){
@@ -83,7 +82,7 @@ export class FormShowroomsComponent implements OnInit{
         });
       },
       error: error => {
-        // TODO: have error handling 
+        // TODO: have error handling
       }
     });
   }

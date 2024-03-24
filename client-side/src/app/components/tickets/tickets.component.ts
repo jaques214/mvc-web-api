@@ -3,10 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms'
 import { Event } from '@models/events';
 import {MatTable } from '@angular/material/table';
 import { formatSession } from '@shared/utils';
-import { API_ENDPOINT } from '@shared/index'
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-tickets',
@@ -21,9 +19,9 @@ export class TicketsComponent implements OnInit {
   @ViewChild(MatTable) table!: MatTable<any>;
   columnsToDisplay: string[] = ['viewValue', 'date', 'startTime', 'endTime'];
   columnsToDisplayHeaders:any = {
-    viewValue: 'Option', 
-    date: 'Date', 
-    startTime: 'Start', 
+    viewValue: 'Option',
+    date: 'Date',
+    startTime: 'Start',
     endTime: 'End'
   };
 
