@@ -1,13 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { Showroom } from '@models/showrooms';
 import { RestService } from '@services/rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SharedFieldFormComponent } from '@src/app/components/shared/form-field/shared-field-form.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-showrooms-form',
-  templateUrl: './showrooms-form.component.html',
-  styleUrls: ['./showrooms-form.component.css']
+    selector: 'app-showrooms-form',
+    templateUrl: './showrooms-form.component.html',
+    styleUrls: ['./showrooms-form.component.css'],
+    imports: [
+      RouterModule,
+      SharedFieldFormComponent,
+      MatCardModule,
+      MatIconModule,
+    ],
 })
 export class FormShowroomsComponent implements OnInit{
   title?: string;

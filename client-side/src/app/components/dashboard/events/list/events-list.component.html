@@ -11,10 +11,12 @@
 
     <table mat-table [dataSource]="dataSource" class="demo-table" multiTemplateDataRows='true' matSort>
 
-      <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
-        <th mat-header-cell *matHeaderCellDef>{{column}}</th>
-        <td mat-cell *matCellDef="let element"> {{ column != 'occupation' ? element[column] : (element[column] + '%') }} </td>
-      </ng-container>
+      @for (column of columnsToDisplay; track column) {
+        <ng-container matColumnDef="{{column}}">
+          <th mat-header-cell *matHeaderCellDef>{{column}}</th>
+          <td mat-cell *matCellDef="let element"> {{ column != 'occupation' ? element[column] : (element[column] + '%') }} </td>
+        </ng-container>
+      }
 
       <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
       <ng-container matColumnDef="expandedDetail">

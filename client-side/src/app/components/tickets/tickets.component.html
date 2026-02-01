@@ -2,15 +2,14 @@
   <div>
     <h2>Sessions</h2>
     <table mat-table [dataSource]="sessions" class="demo-table">
-      <ng-container
-        matColumnDef="{{ column }}"
-        *ngFor="let column of columnsToDisplay"
-      >
-        <th mat-header-cell *matHeaderCellDef>
-          {{ columnsToDisplayHeaders[column] }}
-        </th>
-        <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
-      </ng-container>
+      @for (column of columnsToDisplay; track column) {
+        <ng-container matColumnDef="{{ column }}">
+          <th mat-header-cell *matHeaderCellDef>
+            {{ columnsToDisplayHeaders[column] }}
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+        </ng-container>
+      }
 
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
       <tr mat-row *matRowDef="let element; columns: columnsToDisplay"></tr>
@@ -26,23 +25,22 @@
         <mat-label>Choose a Session</mat-label>
         <mat-select formControlName="session" required>
           <mat-option>None</mat-option>
-          <mat-option
-            *ngFor="let session of sessions"
-            [value]="session.optionValue"
-          >
-            {{ session.viewValue }}
-          </mat-option>
+          @for (session of sessions; track session) {
+            <mat-option [value]="session.optionValue">
+              {{ session.viewValue }}
+            </mat-option>
+          }
         </mat-select>
-        <mat-error *ngIf="firstFormGroup.get('session')?.hasError('required')"
-          >Please choose a Session</mat-error
-        >
+        @if (firstFormGroup.get("session")?.hasError("required")) {
+          <mat-error>Please choose a Session</mat-error>
+        }
       </mat-form-field>
       <mat-form-field appearance="fill">
         <mat-label>Covid Test Result</mat-label>
         <input matInput type="text" formControlName="covidTest" readonly />
-        <mat-error *ngIf="firstFormGroup.get('covidTest')?.hasError('required')"
-          >Please provide a Covid Test</mat-error
-        >
+        @if (firstFormGroup.get("covidTest")?.hasError("required")) {
+          <mat-error>Please provide a Covid Test</mat-error>
+        }
       </mat-form-field>
       <div class="file-upload">
         <input
@@ -67,17 +65,12 @@
       </div>
     </form>
   </mat-step>
-  <mat-step [stepControl]="secondFormGroup" >
+  <mat-step [stepControl]="secondFormGroup">
     <ng-template matStepLabel>Fill out the details</ng-template>
     <form [formGroup]="secondFormGroup">
       <mat-form-field>
         <mat-label>how many tickets</mat-label>
-        <input
-          matInput
-          type="number"
-          formControlName="quantity"
-          required
-        />
+        <input matInput type="number" formControlName="quantity" required />
       </mat-form-field>
       <div>
         <button mat-button matStepperPrevious color="secundary">Back</button>
@@ -90,9 +83,7 @@
     <p>Confirm you purchase</p>
     <div>
       <button mat-button matStepperPrevious color="secundary">Back</button>
-      <button mat-button (click)="onBuy()" color="primary">
-        purchase
-      </button>
+      <button mat-button (click)="onBuy()" color="primary">purchase</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

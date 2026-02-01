@@ -4,7 +4,7 @@ import { RestService } from '@services/rest.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { Event } from '@models/events';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
@@ -15,21 +15,21 @@ import {
   trigger,
 } from '@angular/animations';
 import { API_ENDPOINT } from '@shared/index'
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
-  selector: 'app-client-events-list',
-  templateUrl: './client-events-list.component.html',
-  styleUrls: ['./client-events-list.component.css'],
-  animations: [
-    trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
-      state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
-    ]),
-  ],
+    selector: 'app-client-events-list',
+    templateUrl: './client-events-list.component.html',
+    styleUrls: ['./client-events-list.component.css'],
+    animations: [
+        trigger('detailExpand', [
+            state('collapsed', style({ height: '0px', minHeight: '0' })),
+            state('expanded', style({ height: '*' })),
+            transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+    ],
+    imports: [MatCardModule, MatTableModule, MatFormFieldModule],
 })
 export class ClientEventsListComponent implements OnInit {
   title?: string = 'Listagem';

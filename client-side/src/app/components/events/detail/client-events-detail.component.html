@@ -9,7 +9,9 @@
     </mat-card-subtitle>
     <mat-card-title [ngClass]="'event-title'">{{ event.title }}</mat-card-title>
   </mat-card-header>
-  <img *ngIf="event" src="{{ imageFieldPath }}" alt="poster" />
+  @if (event) {
+    <img src="{{ imageFieldPath }}" alt="poster" />
+  }
   <mat-card-content>
     <div class="content">
       <p>

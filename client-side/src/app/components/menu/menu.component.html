@@ -3,13 +3,16 @@
     <button [routerLink]="['/']" mat-button>Home</button>
     <button [routerLink]="['/about']" mat-button>About</button>
     <button [routerLink]="['/events']" mat-button>Events</button>
-    <button *ngIf="this.user?.role?.value && this.user?.role?.value !== 'Client'" [routerLink]="['/dashboard']" mat-button>Dashboard</button>
+    @if (this.user?.role?.value && this.user?.role?.value !== "Client") {
+      <button [routerLink]="['/dashboard']" mat-button>Dashboard</button>
+    }
     <span class="example-spacer"></span>
 
     <button mat-icon-button (click)="openDialog()">
-      <mat-icon aria-hidden="false" aria-label="account circle icon">account_circle</mat-icon>
+      <mat-icon aria-hidden="false" aria-label="account circle icon"
+        >account_circle</mat-icon
+      >
     </button>
-    <span class="greeting">{{username()}}</span>
-
+    <span class="greeting">{{ username() }}</span>
   </mat-toolbar-row>
 </mat-toolbar>

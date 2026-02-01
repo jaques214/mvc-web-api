@@ -5,11 +5,14 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_ENDPOINT } from '@shared/index';
 import {Router} from "@angular/router";
+import { MatCardModule } from '@angular/material/card';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.css'],
+    imports: [MatCardModule, CommonModule],
 })
 export class HomeComponent implements OnInit {
   collection = 'Event';

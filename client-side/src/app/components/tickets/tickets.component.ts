@@ -1,32 +1,37 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
 import { Event } from '@models/events';
-import {MatTable } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { formatSession } from '@shared/utils';
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-tickets',
   templateUrl: './tickets.component.html',
-  styleUrls: ['./tickets.component.css']
+  styleUrls: ['./tickets.component.css'],
+  imports: [MatFormFieldModule, MatStepperModule, MatTableModule, MatSelectModule, MatIconModule, ReactiveFormsModule],
 })
 export class TicketsComponent implements OnInit {
   event!: Event;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
-  sessions!:any[]
+  sessions!: any[]
   @ViewChild(MatTable) table!: MatTable<any>;
   columnsToDisplay: string[] = ['viewValue', 'date', 'startTime', 'endTime'];
-  columnsToDisplayHeaders:any = {
+  columnsToDisplayHeaders: any = {
     viewValue: 'Option',
     date: 'Date',
     startTime: 'Start',
     endTime: 'End'
   };
 
-  imageFieldPath?:string;
-  imageFieldName?:string;
+  imageFieldPath?: string;
+  imageFieldName?: string;
   fileSelected?: File;
 
   constructor(private _formBuilder: FormBuilder, private restService: RestService, private route: ActivatedRoute, private router: Router) {
@@ -36,12 +41,12 @@ export class TicketsComponent implements OnInit {
       this.populateFields();
     }
   }
-  populateFields(){
+  populateFields() {
     this.sessions = this.event?.sessions?.map(formatSession) || [];
     this.sessions.forEach((session, index) => {
-     (session as any).optionValue = index;
-     (session as any).viewValue = 'Session ' + (index + 1) ;
-   })
+      (session as any).optionValue = index;
+      (session as any).viewValue = 'Session ' + (index + 1);
+    })
   }
 
   ngOnInit() {
@@ -60,7 +65,7 @@ export class TicketsComponent implements OnInit {
     this.firstFormGroup.get('covidTest')?.setValue(this.fileSelected?.name)
   }
 
-  onBuy(){
+  onBuy() {
     console.log('form', this.firstFormGroup, this.secondFormGroup);
   }
 }

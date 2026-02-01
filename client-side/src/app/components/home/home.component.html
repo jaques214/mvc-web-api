@@ -1,18 +1,24 @@
-<section class='welcome'>
+<section class="welcome">
   <h1>Programação em Ambiente Web</h1>
 </section>
-<section class='highlights'>
+<section class="highlights">
   <h2>Featured</h2>
   <div class="highlights-content">
-      <mat-card class="event-card" *ngFor="let highlight of (highlights$ | async)">
+      @for (highlight of highlights$ | async; track highlight) {
+      <mat-card class="event-card">
         <mat-card-header class="card-header">
-            <mat-card-title>{{highlight.title}}</mat-card-title>
-            <mat-card-subtitle>{{highlight.showroom.name}}</mat-card-subtitle>
+          <mat-card-title>{{ highlight.title }}</mat-card-title>
+          <mat-card-subtitle>{{ highlight.showroom.name }}</mat-card-subtitle>
         </mat-card-header>
-        <img mat-card-image src="{{highlight.imageFieldPath}}" class="event-poster" alt="poster">
+        <img
+          mat-card-image
+          src="{{ highlight.imageFieldPath }}"
+          class="event-poster"
+          alt="poster"
+        />
         <mat-card-content>
           <p>
-            {{highlight.description}}
+            {{ highlight.description }}
           </p>
         </mat-card-content>
         <mat-card-actions align="end">
@@ -20,6 +26,7 @@
           <button mat-button (click)="onView(highlight)">info</button>
         </mat-card-actions>
       </mat-card>
+    }
   </div>
 </section>
 <section>

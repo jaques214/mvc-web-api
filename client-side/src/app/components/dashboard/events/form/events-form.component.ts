@@ -1,29 +1,35 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { Event } from '@models/events';
-import {MatTable } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { normalizeImageName, calcTime, formatSession, formatDate } from '@shared/utils';
 import { API_ENDPOINT } from '@shared/index'
 import { RestService } from '@services/rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { SharedFieldFormComponent } from '@components/shared/form-field/shared-field-form.component';
 
 @Component({
   selector: 'app-events-form',
   templateUrl: './events-form.component.html',
-  styleUrls: ['./events-form.component.css']
+  styleUrls: ['./events-form.component.css'],
+  imports: [RouterModule, MatCardModule, MatIconModule, MatButtonModule, MatCheckboxModule, SharedFieldFormComponent, MatTableModule],
 })
-export class FormEventsComponent implements OnInit{
+export class FormEventsComponent implements OnInit {
   title?: string;
   event?: Event;
   collection = 'Event';
-  formFields:any = Event.fields();
+  formFields: any = Event.fields();
 
-  imageFieldPath?:string;
-  imageFieldName?:string;
+  imageFieldPath?: string;
+  imageFieldName?: string;
   fileSelected?: File;
 
-  sessions:any[] = [];
+  sessions: any[] = [];
 
   @ViewChild(MatTable) table!: MatTable<any>;
   displayedColumnsSessions: string[] = ['select', 'date', 'startTime', 'endTime'];
@@ -36,25 +42,25 @@ export class FormEventsComponent implements OnInit{
       this.populateForm()
     }
   }
-  getEvent(eventId: string): Observable<any>{
+  getEvent(eventId: string): Observable<any> {
     return this.restService.getCollection<Event>(this.collection, eventId);
   }
 
-  populateForm(){
+  populateForm() {
     //if an event already exists populates the formFields inputs.
-    this.formFields.inputs.forEach((input:any) => {
-      switch(input.name){
-        case 'salesDates':{
-          input.inputs.forEach((date:any) => {
+    this.formFields.inputs.forEach((input: any) => {
+      switch (input.name) {
+        case 'salesDates': {
+          input.inputs.forEach((date: any) => {
             date.model = ((this.event as any)[date.name]) as any;
           });
           break;
         }
-        case 'showroom':{
+        case 'showroom': {
           input.model! = (this.event as any)[input.name!].name;
           break;
         }
-        default:{
+        default: {
           input.model! = (this.event as any)[input.name!];
         }
       }
@@ -63,12 +69,12 @@ export class FormEventsComponent implements OnInit{
     this.imageFieldPath = `${API_ENDPOINT}/${image}`;
     this.imageFieldName = normalizeImageName(image);
 
-    this.sessions = this.event?.sessions?.map(formatSession) || []; 
+    this.sessions = this.event?.sessions?.map(formatSession) || [];
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
-    if(id && !this.event){
+    if (id && !this.event) {
       this.getEvent(id).subscribe((event) => {
         this.event = event;
         this.populateForm();
@@ -84,26 +90,26 @@ export class FormEventsComponent implements OnInit{
 
   onSubmit(): void {
     const data = this.event || new Event();
-    this.formFields.inputs.forEach((input:any) => {
+    this.formFields.inputs.forEach((input: any) => {
       const name = input.name;
-      switch(name){
+      switch (name) {
         case 'salesDates': {
-          input.inputs.forEach((date:any) => {
+          input.inputs.forEach((date: any) => {
             (data as any)[date.name!] = date.model;
           });
           break;
         }
-        default:{
+        default: {
           (data as any)[input.name!] = input.model;
         }
       }
     });
-    
+
     data.poster = this.fileSelected;
     data.sessions = [];
     this.sessions.forEach(session => {
-      const timeStart = calcTime(session.startTime);      
-      const timeEnd = calcTime(session.endTime);  
+      const timeStart = calcTime(session.startTime);
+      const timeEnd = calcTime(session.endTime);
       data.sessions?.push({
         date: new Date(session.date),
         startTime: new Date(timeStart),
@@ -135,14 +141,14 @@ export class FormEventsComponent implements OnInit{
   }
 
   onDelete(): void {
-   this.restService.deleteCollection<Event>(this.collection, this.event?._id).subscribe({
-    next: () => {
-      this.router.navigate(['/events']);
-    },
-    error: error => {
-      // TODO: error handling
-    }
-  });
+    this.restService.deleteCollection<Event>(this.collection, this.event?._id).subscribe({
+      next: () => {
+        this.router.navigate(['/events']);
+      },
+      error: error => {
+        // TODO: error handling
+      }
+    });
   }
 
   addSession() {
@@ -153,7 +159,7 @@ export class FormEventsComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result){
+      if (result) {
         this.sessions.push({
           date: formatDate(result.inputs[0].model),
           startTime: result.inputs[1].inputs[0].model,
@@ -164,7 +170,7 @@ export class FormEventsComponent implements OnInit{
     });
   }
 
-  removeSession(){
+  removeSession() {
     this.sessions = this.sessions.filter(session => {
       return !this.selection.has(session);
     });
@@ -172,7 +178,7 @@ export class FormEventsComponent implements OnInit{
     this.table.renderRows();
   }
 
-  selectionToggle(element:any){
+  selectionToggle(element: any) {
     this.selection.has(element) ? this.selection.delete(element) : this.selection.add(element)
   }
 
@@ -185,11 +191,12 @@ export class FormEventsComponent implements OnInit{
 @Component({
   selector: 'app-session-dialog',
   templateUrl: './session-dialog.component.html',
+  imports: [SharedFieldFormComponent]
 })
 export class SessionDialogComponent {
 
   constructor(public dialogRef: MatDialogRef<SessionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public formFields: any) {}
+    @Inject(MAT_DIALOG_DATA) public formFields: any) { }
 
   onConfirm(): void {
     this.dialogRef.close(this.formFields);

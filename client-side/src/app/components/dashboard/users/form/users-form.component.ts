@@ -2,19 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '@models/users';
 import { Client } from '@models/clients';
 import { RestService } from '@services/rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SharedFieldFormComponent } from '@src/app/components/shared/form-field/shared-field-form.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-users-form',
   templateUrl: './users-form.component.html',
-  styleUrls: ['./users-form.component.css']
+  styleUrls: ['./users-form.component.css'],
+  imports: [RouterModule, SharedFieldFormComponent, MatCardModule, MatIconModule]
 })
-export class FormUsersComponent implements OnInit{
+export class FormUsersComponent implements OnInit {
   title?: string;
   user?: User;
   collection = 'User';
-  formFields:any = User.fields();
+  formFields: any = User.fields();
   fileSelected?: File;
   client: any = new Client();
 
@@ -25,17 +29,17 @@ export class FormUsersComponent implements OnInit{
       this.populateForm()
     }
   }
-  getUser(userId: string): Observable<any>{
+  getUser(userId: string): Observable<any> {
     return this.restService.getCollection<User>(this.collection, userId);
   }
 
-  populateForm(){
-    this.formFields.inputs.forEach((input:any) => {
+  populateForm() {
+    this.formFields.inputs.forEach((input: any) => {
       input.model! = (this.user as any)[input.name!];
-      if(input.name == 'password'){
+      if (input.name == 'password') {
         input.model = undefined;
       }
-      if(input.name == 'role'){
+      if (input.name == 'role') {
         input.model = this.user?.role?.value
       }
     });
@@ -43,7 +47,7 @@ export class FormUsersComponent implements OnInit{
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
-    if(id && !this.user){
+    if (id && !this.user) {
       this.getUser(id).subscribe((user) => {
         this.user = user;
         this.populateForm();
@@ -59,18 +63,18 @@ export class FormUsersComponent implements OnInit{
 
   onSubmit(): void {
     const data = this.user || new User();
-    this.formFields.inputs.forEach((input:any) => {
+    this.formFields.inputs.forEach((input: any) => {
       (data as any)[input.name!] = input.model;
-      if(input.name == 'role'){
+      if (input.name == 'role') {
         data.role = {
           value: this.user?.role
         } as any
       }
     });
-    if(!data.password){
+    if (!data.password) {
       delete data.password;
     }
-    
+
     this.user ? this.editUser(data) : this.addUser(data);
   }
 
@@ -95,13 +99,13 @@ export class FormUsersComponent implements OnInit{
   }
 
   onDelete(): void {
-   this.restService.deleteCollection<User>(this.collection, this.user?._id).subscribe({
-    next: () => {
-      this.router.navigate(['dashboard/users']);
-    },
-    error: error => {
-      // TODO: error handling
-    }
-  });
+    this.restService.deleteCollection<User>(this.collection, this.user?._id).subscribe({
+      next: () => {
+        this.router.navigate(['dashboard/users']);
+      },
+      error: error => {
+        // TODO: error handling
+      }
+    });
   }
 }

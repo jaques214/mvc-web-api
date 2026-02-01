@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+
 import { TicketsComponent } from '@components/tickets/tickets.component';
 import { DashboardMenuComponent } from '@components/dashboard/dashboard-menu/dashboard-menu.component';
 import { ClientEventsListComponent } from '@components/events/list/client-events-list.component';
@@ -13,9 +13,10 @@ import { ErrorComponent } from '@components/error/error.component';
 import { HomeComponent } from '@components/home/home.component';
 import { AboutComponent } from '@components/about/about.component';
 import { ClientEventsDetailComponent } from '@components/events/detail/client-events-detail.component';
+
 import { AuthGuardService } from '@services/auth-guard.service';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: 'dashboard',
     canActivate: [AuthGuardService],
@@ -118,9 +119,3 @@ const routes: Routes = [
     pathMatch: 'full'
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
-})
-export class AppRoutingModule { }

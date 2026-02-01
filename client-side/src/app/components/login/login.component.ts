@@ -2,11 +2,15 @@ import { Router } from '@angular/router';
 import { Component, OnInit, Input } from '@angular/core';
 import { User } from '@models/users';
 import { AuthenticationService } from '@services/authentication.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.css'],
+    imports: [MatFormFieldModule, MatIconModule, FormsModule],
 })
 export class LoginComponent implements OnInit {
   hide = true;

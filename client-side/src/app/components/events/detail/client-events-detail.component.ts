@@ -1,25 +1,29 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Event } from '@models/events';
-import {MatTable } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
 import { formatSession } from '@shared/utils';
 import { API_ENDPOINT } from '@shared/index'
 import { RestService } from '@services/rest.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-client-events-detail',
   templateUrl: './client-events-detail.component.html',
-  styleUrls: ['./client-events-detail.component.css']
+  styleUrls: ['./client-events-detail.component.css'],
+  imports: [CommonModule, RouterModule, MatCardModule, MatIconModule, MatTableModule],
 })
 export class ClientEventsDetailComponent implements OnInit {
   collection = 'Event';
   title?: string;
   event!: Event;
 
-  imageFieldPath?:string;
+  imageFieldPath?: string;
 
-  sessions:any[] = [];
+  sessions: any[] = [];
   @ViewChild(MatTable) table!: MatTable<any>;
   displayedColumnsSessions: string[] = ['date', 'startTime', 'endTime'];
 
@@ -30,19 +34,19 @@ export class ClientEventsDetailComponent implements OnInit {
       this.populateFields();
     }
   }
-  getEvent(eventId: string): Observable<any>{
+  getEvent(eventId: string): Observable<any> {
     return this.restService.getCollection<Event>(this.collection, eventId);
   }
 
-  populateFields(){
+  populateFields() {
     const image = (this.event?.poster as unknown as string);
     this.imageFieldPath = `${API_ENDPOINT}/${image}`;
-    this.sessions = this.event?.sessions?.map(formatSession) || []; 
+    this.sessions = this.event?.sessions?.map(formatSession) || [];
   }
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
-    if(id && !this.event){
+    if (id && !this.event) {
       this.getEvent(id).subscribe((event) => {
         this.event = event;
         this.populateFields();

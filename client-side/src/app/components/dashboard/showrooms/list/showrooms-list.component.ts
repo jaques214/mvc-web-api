@@ -9,7 +9,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { Showroom } from '@models/showrooms';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
@@ -19,6 +19,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-showrooms-list',
@@ -28,12 +30,10 @@ import {
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [MatCardModule, MatTableModule, MatFormFieldModule],
 })
 export class ListShowroomsComponent implements OnInit {
   title?: string = 'Listagem';
@@ -52,7 +52,7 @@ export class ListShowroomsComponent implements OnInit {
     private restService: RestService,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getShowrooms();
@@ -120,12 +120,13 @@ export class ListShowroomsComponent implements OnInit {
 @Component({
   selector: 'app-confirm-message',
   templateUrl: './confirm-message.component.html',
+  imports: [],
 })
 export class ConfirmMessageComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmMessageComponent>,
     @Inject(MAT_DIALOG_DATA) public showroom: Showroom
-  ) {}
+  ) { }
 
   onDelete(): void {
     this.dialogRef.close(this.showroom._id);

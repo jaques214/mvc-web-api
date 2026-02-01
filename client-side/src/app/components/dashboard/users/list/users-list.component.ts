@@ -9,7 +9,7 @@ import {
   MAT_DIALOG_DATA,
 } from '@angular/material/dialog';
 import { User } from '@models/users';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
@@ -19,6 +19,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-users-list',
@@ -28,12 +30,10 @@ import {
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition(
-        'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
-      ),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
+  imports: [MatCardModule, MatTableModule, MatFormFieldModule],
 })
 export class ListUsersComponent implements OnInit {
   title?: string = 'Listagem';
@@ -54,14 +54,14 @@ export class ListUsersComponent implements OnInit {
     private restService: RestService,
     private router: Router,
     public dialog: MatDialog
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getUsers();
     this.table.removeHeaderRowDef;
   }
 
-  onView(user:any) {
+  onView(user: any) {
     this.router.navigate(['dashboard/users/detail/' + user._id], {
       state: {
         user,
@@ -82,7 +82,7 @@ export class ListUsersComponent implements OnInit {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.table.renderRows();
-          users.forEach((user:User) => {
+          users.forEach((user: User) => {
             (user as any).permissions = user.role?.value;
           })
         })
@@ -128,12 +128,13 @@ export class ListUsersComponent implements OnInit {
 @Component({
   selector: 'app-confirm-message',
   templateUrl: './confirm-message.component.html',
+  imports: [],
 })
 export class ConfirmMessageComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmMessageComponent>,
     @Inject(MAT_DIALOG_DATA) public user: User
-  ) {}
+  ) { }
 
   onDelete(): void {
     this.dialogRef.close(this.user._id);
