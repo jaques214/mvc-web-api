@@ -24,7 +24,7 @@ import type { IUserDocument } from './models/users';
 import type { IShowroomDocument } from './models/showrooms';
 import type { IEventDocument } from './models/events';
 import { xss } from 'express-xss-sanitizer'
-import { rateLimit } from 'express-rate-limit'
+import { ipKeyGenerator, rateLimit } from 'express-rate-limit'
 
 const __dirname = new URL('./', import.meta.url).pathname.slice(1);
 console.log('dirname ', __dirname);
@@ -50,8 +50,13 @@ try {
 // Create a rate limit middleware
 const limiter = rateLimit({
   max: 100,
-  windowMS: 15 * 60 * 1000, // 15 minutes
-  key: (req) => req.headers['authorization'] || req.ip,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  keyGenerator: (req) => {
+    const authorization = req.get('authorization');
+    if (authorization) return authorization;
+    if (!req.ip) throw new Error('Unable to determine client IP for rate limiting');
+    return ipKeyGenerator(req.ip);
+  },
 });
 
 
@@ -219,5 +224,4 @@ app.use((err: Error & { status?: number }, req: Request, res: Response, next: Ne
 });
 
 export default app;
-
 

@@ -74,16 +74,12 @@ jobs:
       working-directory: client-side
       run: npm run build
 
-    - name: Install Express dependencies
-      working-directory: server-side
-      run: npm install --no-audit --no-fund
+    - name: Set up Bun
+      uses: oven-sh/setup-bun@v2
 
-    - name: Check Express server syntax
+    - name: Install server dependencies
       working-directory: server-side
-      shell: bash
-      run: |
-        find . -path './node_modules' -prune -o -name '*.js' -type f -print0 \
-          | xargs -0 -r -n1 node --check
+      run: bun install --frozen-lockfile
 
     # Add any setup steps before running the `github/codeql-action/init` action.
     # This includes steps like installing compilers or runtimes (`actions/setup-node`
