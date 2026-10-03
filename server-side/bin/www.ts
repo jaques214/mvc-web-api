@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-import app from '../app.js';
+import app from '../app';
 import createDebug from 'debug';
-import http from 'http';
+import http from 'node:http';
 const debug = createDebug('paw-4-8190214:server');
 
 /**
@@ -34,10 +34,10 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: string) {
   const port = parseInt(val, 10);
 
-  if (isNaN(port)) {
+  if (Number.isNaN(port)) {
     // named pipe
     return val;
   }
@@ -54,25 +54,21 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+function onError(error: NodeJS.ErrnoException) {
+  if (error.syscall !== 'listen') throw error;
 
   const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    ? `Pipe ${port}`
+    : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
-      break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
-      break;
     default:
       throw error;
   }
@@ -84,8 +80,12 @@ function onError(error) {
 
 function onListening() {
   const addr = server.address();
+  if (addr === null) {
+    console.error('Server address is null');
+    return;
+  }
   const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
 }

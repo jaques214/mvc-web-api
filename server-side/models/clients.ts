@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import {addressSchema} from './address.js';
-import {ticketsSchema} from './tickets.js';
+import {addressSchema} from './address';
+import {ticketsSchema} from './tickets';
 const { Schema } = mongoose;
 
 export const clientSchema = new Schema({

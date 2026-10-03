@@ -15,11 +15,9 @@ export const addressSchema = new Schema({
     postalCode: {
         type: String,
         validate: {
-            validator: function(v) {
-              return /\d{4}-\d{3}/.test(v);
-            },
-            message: props => `${props.value} is not a valid postal-code!`
-          },
+            validator: (v: string) => new RegExp(/\d{4}-\d{3}/).test(v),
+            message: (props: { value: string }) => `${props.value} is not a valid postal-code!`
+        },
         required: [true, 'Postal-code is mandatory!']
     },
     country: {

@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import { showroomSchema } from './showrooms.js';
-import { ticketsSchema } from './tickets.js';
-const { Schema } = mongoose;
+
+import { model, Schema, type HydratedDocument, type InferSchemaType } from 'mongoose';
+import { showroomSchema } from './showrooms';
+import { ticketsSchema } from './tickets';
 
 export const eventSchema = new Schema({
   title: {
@@ -44,5 +44,8 @@ export const eventSchema = new Schema({
   },
 });
 
-const Event = mongoose.model("CulturalEvent", eventSchema);
+export type IEvent = InferSchemaType<typeof eventSchema>;
+export type IEventDocument = HydratedDocument<IEvent>;
+
+const Event = model("CulturalEvent", eventSchema);
 export default Event;

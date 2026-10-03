@@ -1,17 +1,19 @@
-import multer from 'multer';
+import { createFileUploadMiddleware } from '../utils/fileUpload';
 
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, 'views_uploads');
-    },
-    filename: function(req, file, cb) {
-        cb(null, file.fieldname + '.txt');
-    }
-});
+export const upload = createFileUploadMiddleware('covidTest', 'views_uploads');
 
-export const upload = multer({storage: storage});
+export type User = {
+  title: string;
+  description: string;
+  inputs: {
+    name: string;
+    type: string;
+    placeholder: string;
+  }[];
+  keys: string[];
+}
 
-export const usersInfo = {
+export const usersInfo: User = {
   title: 'Users', 
   description: 'list of all Users', 
   inputs: [{

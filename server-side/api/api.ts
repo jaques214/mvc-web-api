@@ -1,35 +1,24 @@
-import express from "express";
-import multer from "multer";
-import factoryCrudRouter from "./crudRouter.js";
-import permissions from "../utils/permissionsLevel.js";
-import { checkPermissionLevel, requireAuth } from "./auth.js";
-import authController, { auth } from "../controllers/auth.js";
-import Showroom from "../models/showrooms.js";
-import Address from "../models/address.js";
-import rateLimitMiddleware from "../utils/rateLimit.js";
+import express, { type NextFunction, type Request, type Response } from "express";
+import factoryCrudRouter from "./crudRouter";
+import permissions from "../utils/permissionsLevel";
+import { checkPermissionLevel, requireAuth } from "./auth";
+import authController, { auth } from "../controllers/auth";
+import Showroom from "../models/showrooms";
+import Address from "../models/address";
+import rateLimitMiddleware from "../utils/rateLimit";
+import { covidTestUpload, posterUpload } from "../utils/fileUpload";
 
-let app = express();
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: storage });
+const app = express();
 
 app.use(rateLimitMiddleware, auth.verifySession);
 
 app.use("/auth", authController);
 
-const userController =  async (req, res, next) => {
+const userController =  async (req: Request, res: Response, next: NextFunction) => {
   const { body } = req;
   try {
-    
     const address = await Address.findOne({street: {$eq: body.address}});
+
     if(address){
       body.address = address;
     } else {
@@ -37,7 +26,7 @@ const userController =  async (req, res, next) => {
       return;
     }
   } catch (error) {
-    
+    console.error(error);
   }
   return next()
 }
@@ -45,14 +34,15 @@ const userController =  async (req, res, next) => {
 app.use(
   "/users",
   factoryCrudRouter("users", {
-    delete: [requireAuth, userController],
-    update: [requireAuth, upload.single("covidTest"), userController],
+    remove: [requireAuth, userController],
+    update: [requireAuth, covidTestUpload, userController],
     all: [requireAuth],
+    read: [requireAuth],
     create: [requireAuth]
   })
 );
 
-const eventController =  async (req, res, next) => {
+const eventController =  async (req: Request, res: Response, next: NextFunction) => {
   const { body } = req;
 
   if(body.sessions){
@@ -78,8 +68,8 @@ app.use(
   "/events",
   factoryCrudRouter("events", {
     remove: [requireAuth],
-    create: [requireAuth, upload.single("poster"), eventController],
-    update: [requireAuth, upload.single("poster"), eventController],
+    create: [requireAuth, posterUpload, eventController],
+    update: [requireAuth, posterUpload, eventController],
   })
 );
 

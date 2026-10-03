@@ -1,10 +1,13 @@
 import fetch from 'node-fetch';
+import type { Request } from 'express';
 
-export function getAuthTokenFromRequest(request){
+const apiBaseUrl = (process.env.API_BASE_URL ?? `http://localhost:${process.env.PORT ?? '3000'}`).replace(/\/+$/, '');
+
+export function getAuthTokenFromRequest(request: Request): string {
   return request?.headers?.cookie?.split('AuthToken=')?.[1]?.split(';')?.[0] || '';
 }
 
-export async function postData(req, api){
+export async function postData(req: Request, api: string){
   //const token = getAuthTokenFromRequest(req);
   //const contentType = req.header('Content-Type');
   //console.log("contentType", contentType)
@@ -28,7 +31,7 @@ export async function postData(req, api){
     })
   }*/
 
-  const response = await fetch('http://localhost:3000/api/auth/' + api, {
+  const response = await fetch(`${apiBaseUrl}/api/auth/${api}`, {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
@@ -40,8 +43,8 @@ export async function postData(req, api){
   return response;
 }
 
-export async function getData(api, token){
-  return await fetch('http://localhost:3000/api/' + api, {
+export async function getData(api: string, token: string){
+  return await fetch(`${apiBaseUrl}/api/${api}`, {
     headers: {
       'x-access-token': token,
     },

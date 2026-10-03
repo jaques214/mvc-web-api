@@ -1,5 +1,4 @@
-import mongoose from 'mongoose';
-const { Schema } = mongoose;
+import { model, Schema, type InferSchemaType, type HydratedDocument } from "mongoose";
 
 export const ticketsSchema = new Schema({
     nCancelled: Number,
@@ -15,5 +14,8 @@ export const ticketsSchema = new Schema({
     saleDate: Date
 });
 
-const Ticket = mongoose.model('Tickets', ticketsSchema);
+export type ITicket = InferSchemaType<typeof ticketsSchema>;
+export type ITicketDocument = HydratedDocument<ITicket>;
+
+const Ticket = model('Tickets', ticketsSchema);
 export default Ticket;

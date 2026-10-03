@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "set DEBUG=paw-4-8190214:server && nodemon ./bin/www"
+    "start": "bun run ./bin/www",
+    "dev": "set DEBUG=paw-4-8190214:server && bun run ./bin/www"
   },
   "repository": {
     "type": "git",
@@ -15,28 +15,47 @@
   "author": "Jaques Resende",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^8.12.0",
-    "bcryptjs": "^2.4.3",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "debug": "^4.3.4",
-    "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
+    "@types/bcryptjs": "^3.0.0",
+    "@types/debug": "^4.1.13",
+    "@types/express-xss-sanitizer": "^2.0.0",
+    "ajv": "^8.20.0",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "debug": "^4.4.3",
+    "dotenv": "^16.6.1",
+    "ejs": "^3.1.10",
     "escape-html": "^1.0.3",
-    "express": "^4.18.2",
-    "express-rate-limit": "^7.2.0",
-    "form-data": "^4.0.0",
-    "http-errors": "^1.8.0",
-    "joi": "^17.4.0",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.5.0",
-    "morgan": "^1.11.0",
-    "multer": "^2.0.2",
-    "node-fetch": "^2.6.1",
-    "sanitize-filename": "^1.6.3",
-    "swagger-ui-express": "^4.1.6"
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "express-xss-sanitizer": "^2.0.2",
+    "form-data": "^4.0.6",
+    "http-errors": "^1.8.1",
+    "joi": "^17.13.8",
+    "jose": "^6.2.12",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.10.1",
+    "morgan": "^1.12.1",
+    "multer": "^2.4.0",
+    "node-fetch": "^2.7.0",
+    "sanitize-filename": "^1.6.4",
+    "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "@biomejs/biome": "^2.5.14",
+    "@types/bun": "latest",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/escape-html": "^1.0.4",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.2.0",
+    "@types/node": "^26.6.2",
+    "@types/node-fetch": "^2.6.13",
+    "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "bson": "7.2.0"
   }
 }

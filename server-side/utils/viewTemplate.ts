@@ -1,4 +1,6 @@
-export default function template(res, info, data = []){
+import type { Response } from "express";
+
+export default function template(res: Response, info: any, data = []){
   const results = Array.isArray(data) ? data : [data];
   try {
     res.render('results', {

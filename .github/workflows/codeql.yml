@@ -11,6 +11,10 @@
 #
 name: "CodeQL Advanced"
 
+concurrency:
+  group: codeql-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: [ "master" ]
@@ -56,6 +60,30 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v7
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+
+    - name: Install Angular dependencies
+      working-directory: client-side
+      run: npm install --no-audit --no-fund
+
+    - name: Build Angular client
+      working-directory: client-side
+      run: npm run build
+
+    - name: Install Express dependencies
+      working-directory: server-side
+      run: npm install --no-audit --no-fund
+
+    - name: Check Express server syntax
+      working-directory: server-side
+      shell: bash
+      run: |
+        find . -path './node_modules' -prune -o -name '*.js' -type f -print0 \
+          | xargs -0 -r -n1 node --check
 
     # Add any setup steps before running the `github/codeql-action/init` action.
     # This includes steps like installing compilers or runtimes (`actions/setup-node`

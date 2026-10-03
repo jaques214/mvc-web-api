@@ -1,6 +1,7 @@
-import mongoose from 'mongoose';
-import {addressSchema} from './address.js';
-const { Schema } = mongoose;
+
+import { model, Schema, type InferSchemaType } from 'mongoose';
+import {addressSchema} from './address';
+import type { HydratedDocument } from 'mongoose';
 
 export const showroomSchema = new Schema({
   name: {
@@ -21,5 +22,8 @@ export const showroomSchema = new Schema({
   }
 });
 
-const Showroom = mongoose.model("Showroom", showroomSchema);
+export type IShowroom = InferSchemaType<typeof showroomSchema>;
+export type IShowroomDocument = HydratedDocument<IShowroom>;
+
+const Showroom = model("Showroom", showroomSchema);
 export default Showroom;
