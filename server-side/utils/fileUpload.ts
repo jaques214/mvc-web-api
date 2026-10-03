@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { promises as fs } from "node:fs";
-import { extname } from "node:path";
+import { extname, relative, resolve, sep } from "node:path";
 import { TextDecoder } from "node:util";
 import type { RequestHandler } from "express";
 import multer from "multer";
@@ -44,9 +44,16 @@ function hasValidContents(field: UploadField, content: Buffer): boolean {
 
 export function createFileUploadMiddleware(field: UploadField, destination = "uploads"): RequestHandler {
   const rules = uploadRules[field];
+  const uploadRoot = resolve("uploads");
+  const resolvedDestination = resolve(uploadRoot, destination);
+  const destinationRelative = relative(uploadRoot, resolvedDestination);
+  if (destinationRelative.startsWith("..") || destinationRelative.includes(`..${sep}`)) {
+    throw new Error("Invalid upload destination");
+  }
+
   const upload = multer({
     storage: multer.diskStorage({
-      destination: (_req, _file, callback) => callback(null, destination),
+      destination: (_req, _file, callback) => callback(null, resolvedDestination),
       filename: (_req, file, callback) => {
         callback(null, `${field}_${randomUUID()}${extname(file.originalname).toLowerCase()}`);
       },
@@ -78,9 +85,16 @@ export function createFileUploadMiddleware(field: UploadField, destination = "up
       }
 
       try {
-        const content = await fs.readFile(req.file.path);
+        const resolvedUploadedPath = resolve(req.file.path);
+        const uploadedRelative = relative(uploadRoot, resolvedUploadedPath);
+        if (uploadedRelative.startsWith("..") || uploadedRelative.includes(`..${sep}`)) {
+          res.status(400).json({ message: "Invalid file upload" });
+          return;
+        }
+
+        const content = await fs.readFile(resolvedUploadedPath);
         if (!hasValidContents(field, content)) {
-          await fs.unlink(req.file.path);
+          await fs.unlink(resolvedUploadedPath);
           res.status(400).json({ message: "Uploaded file content is invalid" });
           return;
         }
