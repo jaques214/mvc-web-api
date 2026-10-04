@@ -7,26 +7,27 @@ import { Router, RouterModule } from '@angular/router';
 import { LoginComponent } from '@components/login/login.component';
 
 @Component({
-    selector: 'app-menu',
-    templateUrl: './menu.component.html',
-    styleUrls: ['./menu.component.css'],
-    imports: [RouterModule, MatToolbarModule, MatIconModule, MatButtonModule],
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.css'],
+  imports: [RouterModule, MatToolbarModule, MatIconModule, MatButtonModule],
 })
 export class MenuComponent implements OnInit {
 
-  constructor(public dialog: MatDialog, public router: Router) {}
+  constructor(public dialog: MatDialog, public router: Router) { }
 
-  user:any;
+  user: any;
 
   openDialog(): void {
     this.dialog.open(LoginComponent);
   }
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('currentUser') || '');
+    const storedUser = localStorage.getItem('currentUser');
+    this.user = storedUser ? JSON.parse(storedUser) : null;
   }
 
-  username(){
+  username() {
     return this.user ? `Hi ${this.user?.username}!` : "Login";
   }
 }

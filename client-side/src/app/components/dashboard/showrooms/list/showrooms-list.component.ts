@@ -7,6 +7,7 @@ import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
+  MatDialogModule,
 } from '@angular/material/dialog';
 import { Showroom } from '@models/showrooms';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -21,6 +22,8 @@ import {
 } from '@angular/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-showrooms-list',
@@ -28,12 +31,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   styleUrls: ['./showrooms-list.component.css'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition('void => expanded', [
+        style({ height: '0px' }),
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+      ]),
+      transition('expanded => void', [
+        animate(
+          '225ms cubic-bezier(0.4, 0.0, 0.2, 1)',
+          style({ height: '0px' })
+        ),
+      ]),
     ]),
   ],
-  imports: [MatCardModule, MatTableModule, MatFormFieldModule],
+  imports: [MatCardModule, MatTableModule, MatFormFieldModule, MatInputModule, MatButtonModule],
 })
 export class ListShowroomsComponent implements OnInit {
   title?: string = 'Listagem';
@@ -46,7 +57,7 @@ export class ListShowroomsComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   columnsToDisplay: string[] = ['name', 'capacity'];
   dataSource = new MatTableDataSource<any>([]);
-  expandedElement: any | null;
+  expandedElement: any | null = null;
 
   constructor(
     private restService: RestService,
@@ -56,7 +67,6 @@ export class ListShowroomsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getShowrooms();
-    this.table.removeHeaderRowDef;
   }
 
   onView(showroom: any) {
@@ -120,7 +130,7 @@ export class ListShowroomsComponent implements OnInit {
 @Component({
   selector: 'app-confirm-message',
   templateUrl: './confirm-message.component.html',
-  imports: [],
+  imports: [MatDialogModule, MatButtonModule],
 })
 export class ConfirmMessageComponent {
   constructor(

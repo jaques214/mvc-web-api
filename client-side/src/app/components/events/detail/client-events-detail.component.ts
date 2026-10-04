@@ -9,12 +9,13 @@ import { Observable } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-client-events-detail',
   templateUrl: './client-events-detail.component.html',
   styleUrls: ['./client-events-detail.component.css'],
-  imports: [CommonModule, RouterModule, MatCardModule, MatIconModule, MatTableModule],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule, MatTableModule],
 })
 export class ClientEventsDetailComponent implements OnInit {
   collection = 'Event';

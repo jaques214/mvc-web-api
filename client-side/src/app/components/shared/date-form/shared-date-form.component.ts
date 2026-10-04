@@ -3,12 +3,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
     selector: 'app-shared-date-form',
     templateUrl: './shared-date-form.component.html',
     styleUrls: ['./shared-date-form.component.css'],
-    imports: [MatFormFieldModule, MatDatepickerModule, MatSlideToggleModule, FormsModule],
+    imports: [MatFormFieldModule, MatDatepickerModule, MatSlideToggleModule, FormsModule, MatInputModule],
 })
 export class SharedDateFormComponent implements OnInit {
   @Input() dateFields!: any;

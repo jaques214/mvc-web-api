@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "bun run ./bin/www",
-    "dev": "set DEBUG=paw-4-8190214:server && bun run ./bin/www"
+    "dev": "DEBUG=paw-4-8190214:server bun run --hot ./bin/www"
   },
   "repository": {
     "type": "git",

@@ -9,12 +9,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-tickets',
   templateUrl: './tickets.component.html',
   styleUrls: ['./tickets.component.css'],
-  imports: [MatFormFieldModule, MatStepperModule, MatTableModule, MatSelectModule, MatIconModule, ReactiveFormsModule],
+  imports: [MatFormFieldModule, MatStepperModule, MatTableModule, MatSelectModule, MatIconModule, ReactiveFormsModule, MatInputModule, MatButtonModule],
 })
 export class TicketsComponent implements OnInit {
   event!: Event;

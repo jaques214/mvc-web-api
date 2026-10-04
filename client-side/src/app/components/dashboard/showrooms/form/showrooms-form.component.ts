@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { SharedFieldFormComponent } from '@src/app/components/shared/form-field/shared-field-form.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-showrooms-form',
@@ -16,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
       SharedFieldFormComponent,
       MatCardModule,
       MatIconModule,
+      MatButtonModule,
     ],
 })
 export class FormShowroomsComponent implements OnInit{

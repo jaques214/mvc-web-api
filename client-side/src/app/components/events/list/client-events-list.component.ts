@@ -17,6 +17,8 @@ import {
 import { API_ENDPOINT } from '@shared/index'
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-client-events-list',
@@ -29,7 +31,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
         ]),
     ],
-    imports: [MatCardModule, MatTableModule, MatFormFieldModule],
+    imports: [MatCardModule, MatTableModule, MatFormFieldModule, MatInputModule, MatButtonModule],
 })
 export class ClientEventsListComponent implements OnInit {
   title?: string = 'Listagem';
@@ -51,7 +53,6 @@ export class ClientEventsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEvents();
-    this.table.removeHeaderRowDef;
   }
 
   onView(event:any) {

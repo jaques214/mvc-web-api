@@ -27,7 +27,8 @@ export class DashboardMenuComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('currentUser') || '');
+    const storedUser = localStorage.getItem('currentUser');
+    this.user = storedUser ? JSON.parse(storedUser) : null;
     if(this.user.role?.value == 'Admin') {
       this.menus.push({
         name: 'Users',

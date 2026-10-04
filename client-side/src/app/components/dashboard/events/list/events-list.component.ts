@@ -7,6 +7,7 @@ import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
+  MatDialogModule,
 } from '@angular/material/dialog';
 import { Event } from '@models/events';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -23,6 +24,8 @@ import { API_ENDPOINT } from '@shared/index'
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
     selector: 'app-events-list',
@@ -35,7 +38,7 @@ import { MatIconModule } from '@angular/material/icon';
             transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
         ]),
     ],
-    imports: [MatCardModule, MatFormFieldModule, MatTableModule, MatIconModule],
+    imports: [MatCardModule, MatFormFieldModule, MatTableModule, MatIconModule, MatButtonModule, MatInputModule],
 })
 export class ListEventsComponent implements OnInit {
   title?: string = 'Listagem';
@@ -49,16 +52,15 @@ export class ListEventsComponent implements OnInit {
   columnsToDisplay: string[] = ['title', 'arena', 'availability', 'occupation'];
   dataSource = new MatTableDataSource<any>([]);
   expandedElement: any | null;
-
+  
   constructor(
     private restService: RestService,
     private router: Router,
     public dialog: MatDialog
   ) {}
-
+  
   ngOnInit(): void {
     this.getEvents();
-    this.table.removeHeaderRowDef;
   }
 
   onView(event:any) {
@@ -137,7 +139,7 @@ export class ListEventsComponent implements OnInit {
 @Component({
     selector: 'app-confirm-message',
     templateUrl: './confirm-message.component.html',
-    imports: []
+    imports: [MatDialogModule, MatButtonModule],
 })
 export class ConfirmMessageComponent {
   constructor(

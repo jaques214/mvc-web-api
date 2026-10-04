@@ -5,7 +5,7 @@ import { normalizeImageName, calcTime, formatSession, formatDate } from '@shared
 import { API_ENDPOINT } from '@shared/index'
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -191,7 +191,7 @@ export class FormEventsComponent implements OnInit {
 @Component({
   selector: 'app-session-dialog',
   templateUrl: './session-dialog.component.html',
-  imports: [SharedFieldFormComponent]
+  imports: [SharedFieldFormComponent, MatButtonModule, MatDialogModule]
 })
 export class SessionDialogComponent {
 

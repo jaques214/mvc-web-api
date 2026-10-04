@@ -7,12 +7,13 @@ import { API_ENDPOINT } from '@shared/index';
 import {Router} from "@angular/router";
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
-    imports: [MatCardModule, CommonModule],
+    imports: [MatCardModule, CommonModule, MatButtonModule],
 })
 export class HomeComponent implements OnInit {
   collection = 'Event';
