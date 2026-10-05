@@ -3,7 +3,6 @@ import { Observable } from 'rxjs';
 import { RestService } from '@services/rest.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { Event } from '@models/events';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -19,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import type { Schema, Event } from '@models/index';
 
 @Component({
     selector: 'app-client-events-list',
@@ -36,7 +36,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class ClientEventsListComponent implements OnInit {
   title?: string = 'Listagem';
   events: Event[] = [];
-  collection = 'Event';
+  collection: Schema = 'Event';
   data$!: Observable<any>;
 
   @ViewChild(MatTable) table!: MatTable<any>;

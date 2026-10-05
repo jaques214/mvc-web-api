@@ -1,26 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from '@models/users';
-import { Client } from '@models/clients';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { User, userFields } from '@models/users';
+import { Schema } from '@models/index';
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SharedFieldFormComponent } from '@src/app/components/shared/form-field/shared-field-form.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-users-form',
   templateUrl: './users-form.component.html',
   styleUrls: ['./users-form.component.css'],
-  imports: [RouterModule, SharedFieldFormComponent, MatCardModule, MatIconModule]
+  imports: [RouterModule, SharedFieldFormComponent, MatCardModule, MatIconModule, ReactiveFormsModule, MatButtonModule],
 })
 export class FormUsersComponent implements OnInit {
   title?: string;
   user?: User;
-  collection = 'User';
-  formFields: any = User.fields();
+  collection: Schema = 'User';
+  formFields = userFields();
   fileSelected?: File;
-  client: any = new Client();
+  userForm = new FormGroup({
+    username: new FormControl('', { nonNullable: true }),
+    password: new FormControl('', { nonNullable: true }),
+    name: new FormControl('', { nonNullable: true }),
+    role: new FormControl('', { nonNullable: true }),
+  });
 
   constructor(private restService: RestService, private route: ActivatedRoute, private router: Router) {
     const routeState = this.router?.getCurrentNavigation()?.extras?.state
@@ -34,14 +41,11 @@ export class FormUsersComponent implements OnInit {
   }
 
   populateForm() {
-    this.formFields.inputs.forEach((input: any) => {
-      input.model! = (this.user as any)[input.name!];
-      if (input.name == 'password') {
-        input.model = undefined;
-      }
-      if (input.name == 'role') {
-        input.model = this.user?.role?.value
-      }
+    this.userForm.patchValue({
+      username: this.user?.username ?? '',
+      password: '',
+      name: this.user?.name ?? '',
+      role: this.user?.role?.value ?? '',
     });
   }
 
@@ -62,20 +66,18 @@ export class FormUsersComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const data = this.user || new User();
-    this.formFields.inputs.forEach((input: any) => {
-      (data as any)[input.name!] = input.model;
-      if (input.name == 'role') {
-        data.role = {
-          value: this.user?.role
-        } as any
-      }
-    });
-    if (!data.password) {
-      delete data.password;
+    const values = this.userForm.getRawValue();
+    const data: User = {
+      ...this.user,
+      username: values.username,
+      name: values.name,
+      role: { value: values.role },
+    };
+    if (values.password) {
+      data.password = values.password;
     }
 
-    this.user ? this.editUser(data) : this.addUser(data);
+    this.user?._id ? this.editUser({ ...data, _id: this.user._id }) : this.addUser(data);
   }
 
   addUser(user: User): void {
@@ -85,6 +87,10 @@ export class FormUsersComponent implements OnInit {
   }
 
   editUser(user: User): void {
+    if (!user._id) {
+      return;
+    }
+
     this.restService.updateCollection<User>(this.collection, user._id, user, true).subscribe({
       next: () => {
         this.getUser(user._id!).subscribe((user) => {
@@ -99,6 +105,10 @@ export class FormUsersComponent implements OnInit {
   }
 
   onDelete(): void {
+    if (!this.user?._id) {
+      return;
+    }
+
     this.restService.deleteCollection<User>(this.collection, this.user?._id).subscribe({
       next: () => {
         this.router.navigate(['dashboard/users']);

@@ -6,15 +6,15 @@
   @if (event) {
     <img src="{{ imageFieldPath }}" alt="poster" />
   }
-  <form (ngSubmit)="onSubmit()">
+  <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
     <mat-card-content>
-      @for (field of formFields.inputs; track field) {
+      @for (field of formFields; track field) {
         <div>
           @if (field.type != "complex") {
-            <app-shared-field-form [input]="field"></app-shared-field-form>
+            <app-shared-field-form [input]="field" [form]="eventForm"></app-shared-field-form>
           } @else {
             @for (input of field.inputs; track input) {
-              <app-shared-field-form [input]="input"></app-shared-field-form>
+              <app-shared-field-form [input]="input" [form]="eventForm"></app-shared-field-form>
             }
           }
         </div>

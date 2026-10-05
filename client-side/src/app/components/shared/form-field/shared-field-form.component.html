@@ -1,35 +1,31 @@
-@switch (type) {
+@switch (input.type) {
   @case ("date") {
-    <app-shared-date-form [dateFields]="input"></app-shared-date-form>
+    <app-shared-date-form [dateFields]="input" [form]="form"></app-shared-date-form>
   }
   @case ("date-range") {
-    <app-shared-date-form
-      [dateFields]="input"
-      [range]="true"
-    ></app-shared-date-form>
+    <app-shared-date-form [dateFields]="input" [form]="form" [range]="true"></app-shared-date-form>
   }
   @case ("time") {
-    <app-shared-time-form [timeFields]="input"></app-shared-time-form>
+    <app-shared-time-form [timeFields]="input" [form]="form"></app-shared-time-form>
   }
   @case ("time-range") {
-    <app-shared-time-form
-      [timeFields]="input"
-      [range]="true"
-    ></app-shared-time-form>
+    <app-shared-time-form [timeFields]="input" [form]="form" [range]="true"></app-shared-time-form>
   }
   @default {
-    <mat-form-field appearance="fill" class="example-full-width">
-      <mat-label>{{ input.label }}</mat-label>
-      <input
-        matInput
-        type="{{ input.type }}"
-        placeholder="{{ input.placeholder }}"
-        name="{{ input.name }}"
-        [(ngModel)]="input.model"
-      />
-      <mat-icon aria-hidden="false" aria-label="" matSuffix>
-        {{ input.icon }}
-      </mat-icon>
-    </mat-form-field>
+    <div [formGroup]="form">
+      <mat-form-field appearance="fill" class="example-full-width">
+        <mat-label>{{ input.label }}</mat-label>
+        <input
+          matInput
+          [type]="input.type"
+          [placeholder]="input.placeholder ?? ''"
+          [name]="input.name"
+          [formControlName]="input.name"
+        />
+        <mat-icon aria-hidden="false" aria-label="" matSuffix>
+          {{ input.icon }}
+        </mat-icon>
+      </mat-form-field>
+    </div>
   }
 }

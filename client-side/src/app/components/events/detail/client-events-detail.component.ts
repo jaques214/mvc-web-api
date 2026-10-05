@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Event } from '@models/events';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { formatSession } from '@shared/utils';
 import { API_ENDPOINT } from '@shared/index'
@@ -10,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import type { Schema, Event } from '@models/index';
 
 @Component({
   selector: 'app-client-events-detail',
@@ -18,7 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
   imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, MatIconModule, MatTableModule],
 })
 export class ClientEventsDetailComponent implements OnInit {
-  collection = 'Event';
+  collection: Schema = 'Event';
   title?: string;
   event!: Event;
 

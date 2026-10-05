@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { Event } from '@models/events';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { type Event, eventFields, sessionFields } from '@models/events';
 import { MatTable, MatTableModule } from '@angular/material/table';
 import { normalizeImageName, calcTime, formatSession, formatDate } from '@shared/utils';
 import { API_ENDPOINT } from '@shared/index'
@@ -12,18 +13,29 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { SharedFieldFormComponent } from '@components/shared/form-field/shared-field-form.component';
+import { FieldInput, Schema, Showroom } from '@models/index';
 
 @Component({
   selector: 'app-events-form',
   templateUrl: './events-form.component.html',
   styleUrls: ['./events-form.component.css'],
-  imports: [RouterModule, MatCardModule, MatIconModule, MatButtonModule, MatCheckboxModule, SharedFieldFormComponent, MatTableModule],
+  imports: [RouterModule, MatCardModule, MatIconModule, MatButtonModule, MatCheckboxModule, SharedFieldFormComponent, MatTableModule, ReactiveFormsModule],
 })
 export class FormEventsComponent implements OnInit {
   title?: string;
   event?: Event;
-  collection = 'Event';
-  formFields: any = Event.fields();
+  collection: Schema = 'Event';
+  formFields: FieldInput[] = eventFields();
+  eventForm = new FormGroup({
+    title: new FormControl('', { nonNullable: true }),
+    price: new FormControl<number | null>(null),
+    description: new FormControl('', { nonNullable: true }),
+    showroom: new FormControl('', { nonNullable: true }),
+    promoter: new FormControl('', { nonNullable: true }),
+    minimumAge: new FormControl<number | null>(null),
+    saleStartDate: new FormControl<Date | null>(null),
+    saleEndDate: new FormControl<Date | null>(null),
+  });
 
   imageFieldPath?: string;
   imageFieldName?: string;
@@ -47,23 +59,15 @@ export class FormEventsComponent implements OnInit {
   }
 
   populateForm() {
-    //if an event already exists populates the formFields inputs.
-    this.formFields.inputs.forEach((input: any) => {
-      switch (input.name) {
-        case 'salesDates': {
-          input.inputs.forEach((date: any) => {
-            date.model = ((this.event as any)[date.name]) as any;
-          });
-          break;
-        }
-        case 'showroom': {
-          input.model! = (this.event as any)[input.name!].name;
-          break;
-        }
-        default: {
-          input.model! = (this.event as any)[input.name!];
-        }
-      }
+    this.eventForm.patchValue({
+      title: this.event?.title ?? '',
+      price: this.event?.price ?? null,
+      description: this.event?.description ?? '',
+      showroom: this.event?.showroom?.name ?? '',
+      promoter: this.event?.promoter ?? '',
+      minimumAge: this.event?.minimumAge ?? null,
+      saleStartDate: this.event?.saleStartDate ? new Date(this.event.saleStartDate) : null,
+      saleEndDate: this.event?.saleEndDate ? new Date(this.event.saleEndDate) : null,
     });
     const image = (this.event?.poster as unknown as string);
     this.imageFieldPath = `${API_ENDPOINT}/${image}`;
@@ -89,21 +93,25 @@ export class FormEventsComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const data = this.event || new Event();
-    this.formFields.inputs.forEach((input: any) => {
-      const name = input.name;
-      switch (name) {
-        case 'salesDates': {
-          input.inputs.forEach((date: any) => {
-            (data as any)[date.name!] = date.model;
-          });
-          break;
-        }
-        default: {
-          (data as any)[input.name!] = input.model;
-        }
-      }
-    });
+    if (this.eventForm.invalid) {
+      this.eventForm.markAllAsTouched();
+      return;
+    }
+
+    const values = this.eventForm.getRawValue();
+    const data: Event = {
+      ...this.event,
+      title: values.title,
+      price: values.price ?? undefined,
+      description: values.description,
+      showroom: values.showroom
+        ? { ...this.event?.showroom, name: values.showroom } as Showroom
+        : undefined,
+      promoter: values.promoter,
+      minimumAge: values.minimumAge ?? undefined,
+      saleStartDate: values.saleStartDate ?? undefined,
+      saleEndDate: values.saleEndDate ?? undefined,
+    };
 
     data.poster = this.fileSelected;
     data.sessions = [];
@@ -127,6 +135,10 @@ export class FormEventsComponent implements OnInit {
   }
 
   editEvent(event: Event): void {
+    if (!event._id) {
+      return;
+    }
+
     this.restService.updateCollection<Event>(this.collection, event._id, event, true).subscribe({
       next: () => {
         this.getEvent(event._id!).subscribe((event) => {
@@ -141,7 +153,11 @@ export class FormEventsComponent implements OnInit {
   }
 
   onDelete(): void {
-    this.restService.deleteCollection<Event>(this.collection, this.event?._id).subscribe({
+    if (!this.event?._id) {
+      return;
+    }
+
+    this.restService.deleteCollection<Event>(this.collection, this.event._id).subscribe({
       next: () => {
         this.router.navigate(['/events']);
       },
@@ -155,15 +171,15 @@ export class FormEventsComponent implements OnInit {
     this.selection.clear();
     const dialogRef = this.dialog.open(SessionDialogComponent, {
       width: '320px',
-      data: Event.sessionFields()
+      data: sessionFields()
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.sessions.push({
-          date: formatDate(result.inputs[0].model),
-          startTime: result.inputs[1].inputs[0].model,
-          endTime: result.inputs[1].inputs[1].model,
+          date: formatDate(result.date),
+          startTime: result.startTime,
+          endTime: result.endTime,
         })
         this.table.renderRows();
       }
@@ -191,15 +207,24 @@ export class FormEventsComponent implements OnInit {
 @Component({
   selector: 'app-session-dialog',
   templateUrl: './session-dialog.component.html',
-  imports: [SharedFieldFormComponent, MatButtonModule, MatDialogModule]
+  imports: [SharedFieldFormComponent, MatButtonModule, MatDialogModule, ReactiveFormsModule]
 })
 export class SessionDialogComponent {
+  sessionForm = new FormGroup({
+    date: new FormControl<Date | null>(null),
+    startTime: new FormControl('', { nonNullable: true }),
+    endTime: new FormControl('', { nonNullable: true }),
+  });
 
   constructor(public dialogRef: MatDialogRef<SessionDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public formFields: any) { }
+    @Inject(MAT_DIALOG_DATA) public formField: FieldInput) { }
 
   onConfirm(): void {
-    this.dialogRef.close(this.formFields);
+    if (this.sessionForm.invalid) {
+      this.sessionForm.markAllAsTouched();
+      return;
+    }
+    this.dialogRef.close(this.sessionForm.getRawValue());
   }
 
   onCancel(): void {

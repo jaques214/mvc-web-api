@@ -1,25 +1,16 @@
 <h1 mat-dialog-title>Session</h1>
+<form [formGroup]="sessionForm" (ngSubmit)="onConfirm()">
 <div mat-dialog-content>
-  @for (field of formFields.inputs; track field) {
+  @for (field of formField.inputs; track field.name) {
     <div>
-      @if (field.type != "complex") {
-        <app-shared-field-form [input]="field"></app-shared-field-form>
-      } @else {
-        @for (input of field.inputs; track input) {
-          <app-shared-field-form [input]="input"></app-shared-field-form>
-        }
-      }
+      <app-shared-field-form [input]="field" [form]="sessionForm"></app-shared-field-form>
     </div>
   }
 </div>
 <div mat-dialog-actions>
-  <button
-    mat-raised-button
-    color="primary"
-    mat-dialog-close
-    (click)="onConfirm()"
-  >
+  <button mat-raised-button color="primary" type="submit">
     Add
   </button>
   <button mat-button mat-dialog-close (click)="onCancel()">Cancel</button>
 </div>
+</form>

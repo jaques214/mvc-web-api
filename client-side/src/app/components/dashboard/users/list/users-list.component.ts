@@ -7,8 +7,8 @@ import {
   MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
+  MatDialogModule,
 } from '@angular/material/dialog';
-import { User } from '@models/users';
 import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -21,6 +21,9 @@ import {
 } from '@angular/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { type FieldInput, type Schema, User, userFields } from '@models/index';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-users-list',
@@ -33,12 +36,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
       transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
     ]),
   ],
-  imports: [MatCardModule, MatTableModule, MatFormFieldModule],
+  imports: [MatCardModule, MatTableModule, MatFormFieldModule, MatButtonModule, MatInputModule],
 })
 export class ListUsersComponent implements OnInit {
   title?: string = 'Listagem';
-  fields: any = User.fields();
-  collection = 'User';
+  fields: FieldInput[] = userFields();
+  collection: Schema = 'User';
   data$!: Observable<any>;
   role$!: Observable<any>;
   role: string = 'Client';
@@ -58,7 +61,6 @@ export class ListUsersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsers();
-    this.table.removeHeaderRowDef;
   }
 
   onView(user: any) {
@@ -128,7 +130,7 @@ export class ListUsersComponent implements OnInit {
 @Component({
   selector: 'app-confirm-message',
   templateUrl: './confirm-message.component.html',
-  imports: [],
+  imports: [MatDialogModule, MatButtonModule],
 })
 export class ConfirmMessageComponent {
   constructor(

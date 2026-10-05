@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -9,13 +9,10 @@ import { MatInputModule } from '@angular/material/input';
     selector: 'app-shared-time-form',
     templateUrl: './shared-time-form.component.html',
     styleUrls: ['./shared-time-form.component.css'],
-    imports: [CommonModule, MatFormFieldModule, MatIconModule, FormsModule, MatInputModule],
+    imports: [CommonModule, MatFormFieldModule, MatIconModule, ReactiveFormsModule, MatInputModule],
 })
-export class SharedTimeFormComponent implements OnInit {
-  @Input() timeFields!:any
+export class SharedTimeFormComponent {
+  @Input() timeFields!: { label: string; name: string; placeholder?: string; inputs?: { name: string }[] };
+  @Input() form!: FormGroup;
   @Input() range = false;
-
-  constructor() { }
-
-  ngOnInit(): void {}
 }

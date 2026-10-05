@@ -3,16 +3,16 @@
     <mat-card-title>{{ collection }}</mat-card-title>
     <mat-card-subtitle>{{ title }}</mat-card-subtitle>
   </mat-card-header>
-  <form (ngSubmit)="onSubmit()">
+  <form [formGroup]="showroomForm" (ngSubmit)="onSubmit()">
     <mat-card-content>
-      @for (field of formFields.inputs; track field) {
+      @for (field of formFields; track field.name) {
         <div>
-          @if (field.type != "complex") {
-            <app-shared-field-form [input]="field"></app-shared-field-form>
-          } @else {
-            @for (input of field.inputs; track input) {
-              <app-shared-field-form [input]="input"></app-shared-field-form>
+          @if (field.name === "address") {
+            @for (input of field.inputs; track input.name) {
+              <app-shared-field-form [input]="input" [form]="addressForm"></app-shared-field-form>
             }
+          } @else {
+            <app-shared-field-form [input]="field" [form]="showroomForm"></app-shared-field-form>
           }
         </div>
       }
@@ -25,7 +25,7 @@
           >
         </button>
       </div>
-      @if (showroom) {
+      @if (showroom?._id) {
         <button
           mat-raised-button
           color="secundary"

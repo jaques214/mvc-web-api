@@ -26,6 +26,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
+import { Schema } from '@models/index';
 
 @Component({
     selector: 'app-events-list',
@@ -43,7 +44,7 @@ import { MatInputModule } from '@angular/material/input';
 export class ListEventsComponent implements OnInit {
   title?: string = 'Listagem';
   events: Event[] = [];
-  collection = 'Event';
+  collection: Schema = 'Event';
   data$!: Observable<any>;
 
   @ViewChild(MatTable) table!: MatTable<any>;

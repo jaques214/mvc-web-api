@@ -1,31 +1,29 @@
 
 <h1 mat-dialog-title>Create an Account</h1>
 <div mat-dialog-content>
-<form class="example-form" >
+<form class="example-form" [formGroup]="loginForm" (ngSubmit)="login()">
     <div>
     <mat-form-field appearance="fill" class="example-full-width">
       <mat-label>Username</mat-label>
-      <input matInput type="text" placeholder="Enter name" name="{{ userLogin.name }}"
-      [(ngModel)]="username">
+      <input matInput type="text" placeholder="Enter name" formControlName="username">
     </mat-form-field>
   </div>
   <div>
     <mat-form-field appearance="fill" class="example-full-width">
         <mat-label>Enter your password</mat-label>
-        <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
-        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+        <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
           <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
       </mat-form-field>
     </div>
     <div>
-    <button mat-raised-button color="primary" (click)="login()">Login</button>
-    <button mat-raised-button color="primary" (click)="register()">Register</button>
+    <button mat-raised-button color="primary" type="submit">Login</button>
+    <button mat-raised-button color="primary" type="button" (click)="register()">Register</button>
   </div>
 </form>
 </div>
 <div mat-dialog-actions>
-  <button mat-raised-button color="secondary" (click)="logout()">Logout</button>
+  <button mat-raised-button color="secondary" type="button" (click)="logout()">Logout</button>
   <button mat-button mat-dialog-close>Close</button>
 </div>
-

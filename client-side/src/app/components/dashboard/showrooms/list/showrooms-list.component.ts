@@ -24,6 +24,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { Schema } from '@models/index';
 
 @Component({
   selector: 'app-showrooms-list',
@@ -49,7 +50,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class ListShowroomsComponent implements OnInit {
   title?: string = 'Listagem';
   showrooms: Showroom[] = [];
-  collection = 'Showroom';
+  collection: Schema = 'Showroom';
   data$!: Observable<any>;
 
   @ViewChild(MatTable) table!: MatTable<any>;

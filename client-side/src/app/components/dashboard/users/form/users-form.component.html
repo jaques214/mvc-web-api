@@ -3,17 +3,11 @@
     <mat-card-title>Users</mat-card-title>
     <mat-card-subtitle>{{ title }}</mat-card-subtitle>
   </mat-card-header>
-  <form (ngSubmit)="onSubmit()">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
     <mat-card-content>
-      @for (field of formFields.inputs; track field) {
+      @for (field of formFields; track field.name) {
         <div>
-          @if (field.type != "complex") {
-            <app-shared-field-form [input]="field"></app-shared-field-form>
-          } @else {
-            @for (input of field.inputs; track input) {
-              <app-shared-field-form [input]="input"></app-shared-field-form>
-            }
-          }
+          <app-shared-field-form [input]="field" [form]="userForm"></app-shared-field-form>
         </div>
       }
     </mat-card-content>

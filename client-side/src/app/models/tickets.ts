@@ -13,19 +13,22 @@ export enum TicketType {
     Single,
 }
 
-export class Ticket {
-    constructor(public _id?:string, public price?: number, public status?: string, public type?: TicketType, public paymentMethod?: Method, public event?: string) {}
-
-    fields(){
-        return [
-            {
-                name: 'name',
-                type: 'text',
-            },
-            {
-                name: 'named',
-                type: 'number',
-            }
-        ]
-    }
+export type Ticket = {
+    _id?: string;
+    price?: number;
+    status?: string;
+    type?: TicketType;
+    paymentMethod?: Method;
+    event?: string;
 }
+
+export const ticketFields = () => [
+    {
+        name: 'name',
+        type: 'text',
+    },
+    {
+        name: 'named',
+        type: 'number',
+    }
+]

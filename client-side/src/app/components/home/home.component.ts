@@ -1,6 +1,5 @@
 import { RestService } from '@services/rest.service';
 import { Component, OnInit } from '@angular/core';
-import { Event } from '@models/events';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { API_ENDPOINT } from '@shared/index';
@@ -8,6 +7,7 @@ import {Router} from "@angular/router";
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import type { Schema, Event } from '@models/index';
 
 @Component({
     selector: 'app-home',
@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
     imports: [MatCardModule, CommonModule, MatButtonModule],
 })
 export class HomeComponent implements OnInit {
-  collection = 'Event';
+  collection: Schema = 'Event';
   data$!: Observable<any>;
   highlights$!: Observable<any>;
   fresh$!: Observable<any>;

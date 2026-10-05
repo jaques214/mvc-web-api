@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Collection } from '@models/collection';
+import type { Schema } from '@models/index';
 import { API_ENDPOINT } from '@shared/index'
 
 const httpOptions = {
@@ -14,42 +14,58 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class RestService {
-  private wrapper = new Collection();
   private endpoint = `${API_ENDPOINT}/api`;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  getCollection<Type>(collection: string, id: string): Observable<Type> {
-    const url = `${this.endpoint}/${this.wrapper.collection(collection)}/${id}`;
+  collection(schema: Schema) {
+    switch (schema) {
+      case 'User':
+        return 'users';
+      case 'Agent':
+        return 'agents';
+      case 'Event':
+        return 'events';
+      case 'Showroom':
+        return 'showrooms';
+      case 'Ticket':
+        return 'tickets';
+      default:
+        return 'users';
+    }
+  }
+
+  getCollection<Type>(collection: Schema, id: string): Observable<Type> {
+    const url = `${this.endpoint}/${this.collection(collection)}/${id}`;
     return this.http.get<Type>(url);
   }
 
-  getAllCollections<Type>(collection: string): Observable<Type[]> {
-    const url = `${this.endpoint}/${this.wrapper.collection(collection)}`;
+  getAllCollections<Type>(collection: Schema): Observable<Type[]> {
+    const url = `${this.endpoint}/${this.collection(collection)}`;
     return this.http.get<Type[]>(url);
   }
 
-  deleteCollection<Type>(collection: string, id: any): Observable<Type> {
-    const url = `${this.endpoint}/${this.wrapper.collection(collection)}/${id}`;
+  deleteCollection<Type>(collection: Schema, id: string): Observable<Type> {
+    const url = `${this.endpoint}/${this.collection(collection)}/${id}`;
     return this.http.delete<Type>(url);
   }
 
   updateCollection<Type>(
-    collection: string,
-    id: any,
+    collection: Schema,
+    id: string,
     data: Object,
     hasFile: boolean = false
   ): Observable<Type> {
-    const url = `${this.endpoint}/${this.wrapper.collection(collection)}/${id}`;
+    const url = `${this.endpoint}/${this.collection(collection)}/${id}`;
     const payload = hasFile ? this.buildFormData(data) : JSON.stringify(data);
     return this.http.put<Type>(url, payload, hasFile ? {} : httpOptions);
   }
 
   addCollection<Type>(
-    collection: string,
+    collection: Schema,
     data: Object,
     hasFile: boolean = false
   ): Observable<Type> {
-    const url = `${this.endpoint}/${this.wrapper.collection(collection)}`;
+    const url = `${this.endpoint}/${this.collection(collection)}`;
     const payload = hasFile ? this.buildFormData(data) : JSON.stringify(data);
     return this.http.post<Type>(url, payload, hasFile ? {} : httpOptions);
   }

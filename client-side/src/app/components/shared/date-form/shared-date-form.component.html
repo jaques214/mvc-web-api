@@ -1,28 +1,30 @@
 @if (range) {
-  <mat-form-field appearance="fill" class="example-full-width">
-    <mat-label>{{ dateFields?.label }}</mat-label>
-    <mat-date-range-input [rangePicker]="picker">
-      <input
-        matStartDate
-        placeholder="{{ dateFields.inputs[0].placeholder }}"
-        name="{{ dateFields.inputs[0].name }}"
-        [(ngModel)]="dateFields.inputs[0].model"
-      />
-      <input
-        matEndDate
-        placeholder="{{ dateFields.inputs[1].placeholder }}"
-        name="{{ dateFields.inputs[1].name }}"
-        [(ngModel)]="dateFields.inputs[1].model"
-      />
-    </mat-date-range-input>
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-date-range-picker #picker></mat-date-range-picker>
-  </mat-form-field>
+  <div [formGroup]="form">
+    <mat-form-field appearance="fill" class="example-full-width">
+      <mat-label>{{ dateFields.label }}</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input
+          matStartDate
+          [placeholder]="dateFields.inputs?.[0]?.placeholder ?? ''"
+          [formControlName]="dateFields.inputs?.[0]?.name ?? ''"
+        />
+        <input
+          matEndDate
+          [placeholder]="dateFields.inputs?.[1]?.placeholder ?? ''"
+          [formControlName]="dateFields.inputs?.[1]?.name ?? ''"
+        />
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+  </div>
 } @else {
-  <mat-form-field appearance="fill" class="example-full-width">
-    <mat-label>{{ dateFields?.label }}</mat-label>
-    <input [(ngModel)]="dateFields.model" matInput [matDatepicker]="picker" />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+  <div [formGroup]="form">
+    <mat-form-field appearance="fill" class="example-full-width">
+      <mat-label>{{ dateFields.label }}</mat-label>
+      <input matInput [matDatepicker]="picker" [formControlName]="dateFields.name" />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
 }
