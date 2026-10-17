@@ -36,7 +36,7 @@ export class FormUsersComponent implements OnInit {
       this.populateForm()
     }
   }
-  getUser(userId: string): Observable<any> {
+  getUser(userId: string): Observable<User> {
     return this.restService.getCollection<User>(this.collection, userId);
   }
 
@@ -60,7 +60,7 @@ export class FormUsersComponent implements OnInit {
   }
 
   // Using User interface is not possible due to User model class
-  onFileSelected(user: any): void {
+  onFileSelected(user: Event): void {
     const target: HTMLInputElement | null = user.target as HTMLInputElement;
     this.fileSelected = target?.files?.[0] as File;
   }

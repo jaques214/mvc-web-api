@@ -7,7 +7,7 @@
         >Events
       </button>
     </mat-card-subtitle>
-    <mat-card-title [ngClass]="'event-title'">{{ event.title }}</mat-card-title>
+    <mat-card-title [ngClass]="'event-title'">{{ event?.title }}</mat-card-title>
   </mat-card-header>
   @if (event) {
     <img src="{{ imageFieldPath }}" alt="poster" />
@@ -17,7 +17,7 @@
       <p>
         <span class="content-label"> Description: </span>
         <span class="content-body">
-          {{ event.description }}
+          {{ event?.description }}
         </span>
       </p>
     </div>

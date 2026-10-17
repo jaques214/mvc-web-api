@@ -60,21 +60,22 @@ export class RestService {
     return this.http.put<Type>(url, payload, hasFile ? {} : httpOptions);
   }
 
-  addCollection<Type>(
+  addCollection<Type extends Object>(
     collection: Schema,
-    data: Object,
+    data: Type,
     hasFile: boolean = false
   ): Observable<Type> {
     const url = `${this.endpoint}/${this.collection(collection)}`;
-    const payload = hasFile ? this.buildFormData(data) : JSON.stringify(data);
+    const payload = hasFile ? this.buildFormData<Type>(data) : JSON.stringify(data);
     return this.http.post<Type>(url, payload, hasFile ? {} : httpOptions);
   }
 
-  private buildFormData(data: Object): FormData {
+  private buildFormData<TData extends object>(data: TData): FormData {
     const form = new FormData();
-    for (const key of Object.keys(data)) {
-      const field = (data as any)[key];
-      form.append(key, typeof field == 'object' ? JSON.stringify(field) : field);
+    const entries = Object.entries(data) as [string, TData[keyof TData]][];
+    for (const [key, field] of entries) {
+      const value = typeof field === 'object' ? JSON.stringify(field) : field;
+      form.append(key, String(value));
     }
     return form;
   }

@@ -1,4 +1,4 @@
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { RestService } from '@services/rest.service';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
@@ -9,8 +9,11 @@ import {
   MAT_DIALOG_DATA,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { Showroom } from '@models/showrooms';
-import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
+import {
+  MatTable,
+  MatTableDataSource,
+  MatTableModule,
+} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
@@ -24,7 +27,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { Schema } from '@models/index';
+import type { Address, Schema, Showroom } from '@models/index';
+
+export interface ShowroomViewTable {
+  _id: string;
+  name: string;
+  capacity: number;
+  email: string;
+  limit: number;
+  tel: string;
+  address: Address
+}
 
 @Component({
   selector: 'app-showrooms-list',
@@ -40,37 +53,43 @@ import { Schema } from '@models/index';
       transition('expanded => void', [
         animate(
           '225ms cubic-bezier(0.4, 0.0, 0.2, 1)',
-          style({ height: '0px' })
+          style({ height: '0px' }),
         ),
       ]),
     ]),
   ],
-  imports: [MatCardModule, MatTableModule, MatFormFieldModule, MatInputModule, MatButtonModule],
+  imports: [
+    MatCardModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
 export class ListShowroomsComponent implements OnInit {
   title?: string = 'Listagem';
   showrooms: Showroom[] = [];
   collection: Schema = 'Showroom';
-  data$!: Observable<any>;
+  data$!: Observable<ShowroomViewTable[]>;
 
-  @ViewChild(MatTable) table!: MatTable<any>;
+  @ViewChild(MatTable) table!: MatTable<ShowroomViewTable>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   columnsToDisplay: string[] = ['name', 'capacity'];
-  dataSource = new MatTableDataSource<any>([]);
-  expandedElement: any | null = null;
+  dataSource = new MatTableDataSource<ShowroomViewTable>([]);
+  expandedElement: ShowroomViewTable | null = null;
 
   constructor(
     private restService: RestService,
     private router: Router,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.getShowrooms();
   }
 
-  onView(showroom: any) {
+  onView(showroom: ShowroomViewTable) {
     this.router.navigate(['dashboard/showrooms/detail/' + showroom._id], {
       state: {
         showroom,
@@ -78,7 +97,7 @@ export class ListShowroomsComponent implements OnInit {
     });
   }
 
-  onDelete(showroom: any) {
+  onDelete(showroom: ShowroomViewTable) {
     this.openDialog(showroom);
   }
 
@@ -86,18 +105,28 @@ export class ListShowroomsComponent implements OnInit {
     this.data$ = this.restService
       .getAllCollections<Showroom>(this.collection)
       .pipe(
-        map((showrooms) => {
+        map((showrooms: Showroom[]) =>
+          showrooms.map((showroom) => ({
+            _id: showroom._id,
+            name: showroom.name,
+            capacity: showroom.capacity,
+            email: showroom.email,
+            limit: showroom.limit,
+            tel: showroom.tel,
+            address: showroom.address,
+          })),
+        ),
+        tap((showrooms: ShowroomViewTable[]) => {
           this.dataSource = new MatTableDataSource(showrooms);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.table.renderRows();
-          return showrooms;
-        })
+        }),
       );
     this.data$.subscribe();
   }
 
-  applyFilter(event: any) {
+  applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -106,7 +135,7 @@ export class ListShowroomsComponent implements OnInit {
     }
   }
 
-  openDialog(showroom: any) {
+  openDialog(showroom: ShowroomViewTable) {
     const dialogRef = this.dialog.open(ConfirmMessageComponent, {
       width: 'auto',
       data: showroom,
@@ -136,8 +165,8 @@ export class ListShowroomsComponent implements OnInit {
 export class ConfirmMessageComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmMessageComponent>,
-    @Inject(MAT_DIALOG_DATA) public showroom: Showroom
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public showroom: Showroom,
+  ) {}
 
   onDelete(): void {
     this.dialogRef.close(this.showroom._id);

@@ -1,4 +1,4 @@
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { RestService } from '@services/rest.service';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
@@ -9,7 +9,11 @@ import {
   MAT_DIALOG_DATA,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { MatTable, MatTableDataSource, MatTableModule } from '@angular/material/table';
+import {
+  MatTable,
+  MatTableDataSource,
+  MatTableModule,
+} from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import {
@@ -21,9 +25,22 @@ import {
 } from '@angular/animations';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { type FieldInput, type Schema, User, userFields } from '@models/index';
+import {
+  type FieldInput,
+  type Schema,
+  type User,
+  type Role,
+  userFields,
+} from '@models/index';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+
+type UserViewTable = {
+  _id: string;
+  username: string;
+  permissions: string;
+  name: string;
+};
 
 @Component({
   selector: 'app-users-list',
@@ -33,37 +50,46 @@ import { MatButtonModule } from '@angular/material/button';
     trigger('detailExpand', [
       state('collapsed', style({ height: '0px', minHeight: '0' })),
       state('expanded', style({ height: '*' })),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+      transition(
+        'expanded <=> collapsed',
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+      ),
     ]),
   ],
-  imports: [MatCardModule, MatTableModule, MatFormFieldModule, MatButtonModule, MatInputModule],
+  imports: [
+    MatCardModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
+  ],
 })
 export class ListUsersComponent implements OnInit {
-  title?: string = 'Listagem';
+  title: string = 'Listagem';
   fields: FieldInput[] = userFields();
   collection: Schema = 'User';
-  data$!: Observable<any>;
-  role$!: Observable<any>;
+  data$!: Observable<UserViewTable[]>;
+  role$!: Observable<Role[]>;
   role: string = 'Client';
 
-  @ViewChild(MatTable) table!: MatTable<any>;
+  @ViewChild(MatTable) table!: MatTable<UserViewTable>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  columnsToDisplay: string[] = ['username', 'permissions'];
-  dataSource = new MatTableDataSource<any>([]);
-  expandedElement: any | null;
+  columnsToDisplay = ['username', 'permissions'];
+  dataSource = new MatTableDataSource<UserViewTable>([]);
+  expandedElement: UserViewTable | null = null;
 
   constructor(
     private restService: RestService,
     private router: Router,
-    public dialog: MatDialog
-  ) { }
+    public dialog: MatDialog,
+  ) {}
 
   ngOnInit(): void {
     this.getUsers();
   }
 
-  onView(user: any) {
+  onView(user: UserViewTable) {
     this.router.navigate(['dashboard/users/detail/' + user._id], {
       state: {
         user,
@@ -71,28 +97,31 @@ export class ListUsersComponent implements OnInit {
     });
   }
 
-  onDelete(user: any) {
+  onDelete(user: UserViewTable) {
     this.openDialog(user);
   }
 
   getUsers(): void {
-    this.data$ = this.restService
-      .getAllCollections<User>(this.collection)
-      .pipe(
-        tap((users) => {
-          this.dataSource = new MatTableDataSource(users);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.table.renderRows();
-          users.forEach((user: User) => {
-            (user as any).permissions = user.role?.value;
-          })
-        })
-      );
+    this.data$ = this.restService.getAllCollections<User>(this.collection).pipe(
+      map((users: User[]) =>
+        users.map((user) => ({
+          _id: user._id ?? crypto.randomUUID(),
+          username: user.username,
+          permissions: user.role.value,
+          name: user.name,
+        })),
+      ),
+      tap((users: UserViewTable[]) => {
+        this.dataSource = new MatTableDataSource(users);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.table.renderRows();
+      }),
+    );
     this.data$.subscribe();
   }
 
-  applyFilter(user: any) {
+  applyFilter(user: KeyboardEvent) {
     const filterValue = (user.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -101,7 +130,7 @@ export class ListUsersComponent implements OnInit {
     }
   }
 
-  openDialog(user: any) {
+  openDialog(user: UserViewTable) {
     const dialogRef = this.dialog.open(ConfirmMessageComponent, {
       width: 'auto',
       data: user,
@@ -117,13 +146,10 @@ export class ListUsersComponent implements OnInit {
             },
             error: (error) => {
               // TODO: error handling
+              console.error('Error deleting user:', error);
             },
           });
     });
-  }
-
-  formatDate(date: Date | undefined): string {
-    return date?.toDateString() || '';
   }
 }
 
@@ -135,8 +161,8 @@ export class ListUsersComponent implements OnInit {
 export class ConfirmMessageComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmMessageComponent>,
-    @Inject(MAT_DIALOG_DATA) public user: User
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public user: User,
+  ) {}
 
   onDelete(): void {
     this.dialogRef.close(this.user._id);

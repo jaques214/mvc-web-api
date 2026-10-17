@@ -5,6 +5,12 @@ export * from './showrooms';
 export * from './tickets';
 export * from './users';
 
+export type FormattedSession = {
+  date: string;
+  startTime: string;
+  endTime: string;
+};
+
 type BaseFieldInput = {
     label: string;
     name: string;

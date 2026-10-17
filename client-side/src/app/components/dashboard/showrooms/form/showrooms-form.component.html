@@ -1,7 +1,7 @@
 <mat-card class="card">
   <mat-card-header>
     <mat-card-title>{{ collection }}</mat-card-title>
-    <mat-card-subtitle>{{ title }}</mat-card-subtitle>
+    <mat-card-subtitle>{{ showroom ? showroom.name : title }}</mat-card-subtitle>
   </mat-card-header>
   <form [formGroup]="showroomForm" (ngSubmit)="onSubmit()">
     <mat-card-content>

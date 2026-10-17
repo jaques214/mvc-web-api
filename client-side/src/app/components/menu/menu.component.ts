@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 import { LoginComponent } from '@components/login/login.component';
+import type { User } from '@models/index';
 
 @Component({
   selector: 'app-menu',
@@ -16,7 +17,7 @@ export class MenuComponent implements OnInit {
 
   constructor(public dialog: MatDialog, public router: Router) { }
 
-  user: any;
+  user: User | null = null;
 
   openDialog(): void {
     this.dialog.open(LoginComponent);

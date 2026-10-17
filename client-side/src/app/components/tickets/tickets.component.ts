@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms'
-import { Event } from '@models/events';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  type Ticket,
+  type FormattedSession,
+  TicketType,
+  Method,
+} from '@models/index';
 import { MatTable, MatTableModule } from '@angular/material/table';
-import { formatSession } from '@shared/utils';
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,63 +15,110 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { ClientEventViewTable } from '../events/list/client-events-list.component';
+
+type SessionViewTable = FormattedSession & {
+  viewValue: string;
+  optionValue: number;
+};
 
 @Component({
   selector: 'app-tickets',
   templateUrl: './tickets.component.html',
   styleUrls: ['./tickets.component.css'],
-  imports: [MatFormFieldModule, MatStepperModule, MatTableModule, MatSelectModule, MatIconModule, ReactiveFormsModule, MatInputModule, MatButtonModule],
+  imports: [
+    MatFormFieldModule,
+    MatStepperModule,
+    MatTableModule,
+    MatSelectModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
 export class TicketsComponent implements OnInit {
-  event!: Event;
-  firstFormGroup!: FormGroup;
-  secondFormGroup!: FormGroup;
-  sessions!: any[]
-  @ViewChild(MatTable) table!: MatTable<any>;
-  columnsToDisplay: string[] = ['viewValue', 'date', 'startTime', 'endTime'];
-  columnsToDisplayHeaders: any = {
+  event!: ClientEventViewTable;
+  firstFormGroup = this._formBuilder.group({
+    session: [0, Validators.required],
+    covidTest: ['', Validators.required],
+  });
+  secondFormGroup = this._formBuilder.group({
+    quantity: [0, Validators.required],
+  });
+  sessions!: SessionViewTable[];
+  @ViewChild(MatTable) table!: MatTable<SessionViewTable>;
+  columnsToDisplay = ['viewValue', 'date', 'startTime', 'endTime'];
+  columnsToDisplayHeaders: Record<string, string> = {
     viewValue: 'Option',
     date: 'Date',
     startTime: 'Start',
-    endTime: 'End'
+    endTime: 'End',
   };
 
   imageFieldPath?: string;
   imageFieldName?: string;
   fileSelected?: File;
 
-  constructor(private _formBuilder: FormBuilder, private restService: RestService, private route: ActivatedRoute, private router: Router) {
-    const routeState = this.router?.getCurrentNavigation()?.extras?.state
+  constructor(
+    private _formBuilder: FormBuilder,
+    private restService: RestService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+    const routeState = this.router?.getCurrentNavigation()?.extras?.state;
     if (routeState) {
       this.event = routeState.event;
       this.populateFields();
     }
   }
   populateFields() {
-    this.sessions = this.event?.sessions?.map(formatSession) || [];
-    this.sessions.forEach((session, index) => {
-      (session as any).optionValue = index;
-      (session as any).viewValue = 'Session ' + (index + 1);
-    })
+    this.sessions = this.event.sessions
+      .map((session, index) => ({
+        ...session,
+        optionValue: index,
+        viewValue: `Session ${index + 1}`,
+      }));
   }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      session: ['', Validators.required],
+      session: [0, Validators.required],
       covidTest: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
-      quantity: ['', Validators.required]
+      quantity: [0, Validators.required],
     });
   }
 
-  onFileSelected(event: any): void {
+  onFileSelected(event: Event): void {
     const target: HTMLInputElement | null = event.target as HTMLInputElement;
     this.fileSelected = target?.files?.[0] as File;
-    this.firstFormGroup.get('covidTest')?.setValue(this.fileSelected?.name)
+    this.firstFormGroup.get('covidTest')?.setValue(this.fileSelected?.name);
   }
 
   onBuy() {
-    console.log('form', this.firstFormGroup, this.secondFormGroup);
+    if (this.firstFormGroup.invalid || this.secondFormGroup.invalid) return;
+    if (!this.firstFormGroup.value || !this.secondFormGroup.value) return;
+
+    this.restService
+      .addCollection<Ticket>(
+        'Ticket',
+        {
+          _id: crypto.randomUUID(),
+          price: 0.0,
+          status: 'pending',
+          type:
+            this.secondFormGroup.value.quantity === 1
+              ? TicketType.Single
+              : TicketType.Family,
+          paymentMethod: Method.Multibanco,
+          event: !this.firstFormGroup.value.session ? undefined : this.sessions[this.firstFormGroup.value.session].viewValue,
+        },
+        true,
+      )
+      .subscribe(() => {
+        this.router.navigate(['/events']);
+      });
   }
 }

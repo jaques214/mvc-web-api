@@ -1,4 +1,4 @@
-enum Method {
+export enum Method {
     PayPal = "PayPal",
     Banco = "Transferência Bancária",
     Visa = "VISA",

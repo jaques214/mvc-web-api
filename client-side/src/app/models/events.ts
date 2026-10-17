@@ -1,25 +1,25 @@
 import type { Showroom } from './showrooms';
 import type { Ticket } from './tickets';
 
-type SessionObj = {
-  date?: Date;
-  startTime?: Date;
-  endTime?: Date;
+export type SessionObj = {
+  date: Date;
+  startTime: Date;
+  endTime: Date;
 };
 
-export type Event = {
+export type ShowroomEvent = {
   _id?: string;
-  title?: string;
+  title: string;
   poster?: File;
-  description?: string;
+  description: string;
   showroom?: Showroom;
-  promoter?: string;
-  minimumAge?: number;
-  saleStartDate?: Date;
-  saleEndDate?: Date;
+  promoter: string;
+  minimumAge: number;
+  saleStartDate: Date;
+  saleEndDate: Date;
   tickets?: Ticket[];
-  price?: number;
-  sessions?: SessionObj[];
+  price: number;
+  sessions: SessionObj[];
 }
 
 export const eventFields = () => [

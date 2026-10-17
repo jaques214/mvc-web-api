@@ -1,6 +1,6 @@
 import { Client } from './clients';
 
-type Role = {
+export type Role = {
     value: string;
     clientDetails?: Client;
 }
@@ -8,10 +8,10 @@ type Role = {
 export type User = {
     token?: string;
     _id?: string;
-    name?: string;
-    username?: string;
+    name: string;
+    username: string;
     password?: string;
-    role?: Role;
+    role: Role;
 }
 
 export const userFields = () => [

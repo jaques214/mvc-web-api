@@ -1,5 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Address, FieldInput, Showroom, showroomFields, type Schema } from '@models/index';
+import {
+  type Address,
+  type FieldInput,
+  type Showroom,
+  showroomFields,
+  type Schema,
+} from '@models/index';
 import { RestService } from '@services/rest.service';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -8,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ShowroomViewTable } from '../list/showrooms-list.component';
 
 @Component({
   selector: 'app-showrooms-form',
@@ -23,8 +30,8 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   ],
 })
 export class FormShowroomsComponent implements OnInit {
-  title?: string;
-  showroom?: Showroom;
+  title = "New Showroom";
+  showroom: ShowroomViewTable | null = null;
   collection: Schema = 'Showroom';
   formFields: FieldInput[] = showroomFields();
   showroomForm = new FormGroup({
@@ -41,8 +48,12 @@ export class FormShowroomsComponent implements OnInit {
     limit: new FormControl<number | null>(null),
   });
 
-  constructor(private restService: RestService, private route: ActivatedRoute, private router: Router) {
-    const routeState = this.router?.getCurrentNavigation()?.extras?.state
+  constructor(
+    private restService: RestService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) {
+    const routeState = this.router?.getCurrentNavigation()?.extras?.state;
     if (routeState?.showroom) {
       this.showroom = routeState.showroom;
       this.populateForm();
@@ -54,7 +65,10 @@ export class FormShowroomsComponent implements OnInit {
   }
 
   getShowroom(showroomId: string): Observable<Showroom> {
-    return this.restService.getCollection<Showroom>(this.collection, showroomId);
+    return this.restService.getCollection<Showroom>(
+      this.collection,
+      showroomId,
+    );
   }
 
   populateForm() {
@@ -114,23 +128,28 @@ export class FormShowroomsComponent implements OnInit {
   }
 
   addShowroom(showroom: Omit<Showroom, '_id'>): void {
-    this.restService.addCollection<Showroom>(this.collection, showroom).subscribe(() => {
-      this.router.navigate(['dashboard/showrooms']);
-    });
+    this.restService
+      .addCollection<Omit<Showroom, '_id'>>(this.collection, showroom)
+      .subscribe(() => {
+        this.router.navigate(['dashboard/showrooms']);
+      });
   }
 
   editShowroom(showroom: Showroom): void {
-    this.restService.updateCollection<Showroom>(this.collection, showroom._id, showroom).subscribe({
-      next: () => {
-        this.getShowroom(showroom._id!).subscribe((showroom) => {
-          this.showroom = showroom;
-          this.populateForm();
-        });
-      },
-      error: error => {
-        // TODO: have error handling
-      }
-    });
+    this.restService
+      .updateCollection<Showroom>(this.collection, showroom._id, showroom)
+      .subscribe({
+        next: () => {
+          this.getShowroom(showroom._id!).subscribe((showroom) => {
+            this.showroom = showroom;
+            this.populateForm();
+          });
+        },
+        error: (error) => {
+          // TODO: have error handling
+          console.error('Error updating showroom', error);
+        },
+      });
   }
 
   onDelete(): void {
@@ -138,13 +157,16 @@ export class FormShowroomsComponent implements OnInit {
       return;
     }
 
-    this.restService.deleteCollection<Showroom>(this.collection, this.showroom._id).subscribe({
-      next: () => {
-        this.router.navigate(['dashboard/showrooms']);
-      },
-      error: error => {
-        // TODO: error handling
-      }
-    });
+    this.restService
+      .deleteCollection<Showroom>(this.collection, this.showroom._id)
+      .subscribe({
+        next: () => {
+          this.router.navigate(['dashboard/showrooms']);
+        },
+        error: (error) => {
+          // TODO: error handling
+          console.error("Error deleting showroom", error)
+        },
+      });
   }
 }

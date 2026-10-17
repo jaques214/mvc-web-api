@@ -3,7 +3,7 @@
     <button [routerLink]="['/']" mat-button>Home</button>
     <button [routerLink]="['/about']" mat-button>About</button>
     <button [routerLink]="['/events']" mat-button>Events</button>
-    @if (this.user?.role?.value && this.user?.role?.value !== "Client") {
+    @if (this.user !== null && user.role.value !== "Client") {
       <button [routerLink]="['/dashboard']" mat-button>Dashboard</button>
     }
     <span class="example-spacer"></span>
