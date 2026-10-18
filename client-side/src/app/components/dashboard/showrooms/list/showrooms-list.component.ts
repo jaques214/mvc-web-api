@@ -29,7 +29,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import type { Address, Schema, Showroom } from '@models/index';
 
-export interface ShowroomViewTable {
+export type ShowroomViewTable = {
   _id: string;
   name: string;
   capacity: number;
@@ -151,6 +151,7 @@ export class ListShowroomsComponent implements OnInit {
             },
             error: (error) => {
               // TODO: error handling
+              console.error("Error deleting showroom", error)
             },
           });
     });

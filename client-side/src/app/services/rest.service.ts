@@ -52,18 +52,18 @@ export class RestService {
   updateCollection<Type>(
     collection: Schema,
     id: string,
-    data: Object,
-    hasFile: boolean = false
+    data: object,
+    hasFile = false
   ): Observable<Type> {
     const url = `${this.endpoint}/${this.collection(collection)}/${id}`;
     const payload = hasFile ? this.buildFormData(data) : JSON.stringify(data);
     return this.http.put<Type>(url, payload, hasFile ? {} : httpOptions);
   }
 
-  addCollection<Type extends Object>(
+  addCollection<Type extends object>(
     collection: Schema,
     data: Type,
-    hasFile: boolean = false
+    hasFile = false
   ): Observable<Type> {
     const url = `${this.endpoint}/${this.collection(collection)}`;
     const payload = hasFile ? this.buildFormData<Type>(data) : JSON.stringify(data);

@@ -291,9 +291,11 @@ export class FormEventsComponent implements OnInit {
   }
 
   selectionToggle(element: FormattedSession) {
-    this.selection.has(element)
-      ? this.selection.delete(element)
-      : this.selection.add(element);
+    if (this.selection.has(element)) {
+      this.selection.delete(element);
+    } else {
+      this.selection.add(element);
+    }
   }
 
   checkboxLabel(row: FormattedSession): string {

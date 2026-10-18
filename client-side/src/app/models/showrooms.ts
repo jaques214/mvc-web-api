@@ -10,7 +10,7 @@ export type Showroom = {
   limit: number;
 }
 
-export const realCapacity = (capacity: number = 0, limit: number = 1) => capacity * limit;
+export const realCapacity = (capacity = 0, limit = 1) => capacity * limit;
 
 export const showroomFields = () => [
   {

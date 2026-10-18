@@ -24,7 +24,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import type { Address, FormattedSession, ShowroomEvent } from '@models/index';
 
-export interface ClientEventViewTable {
+export type ClientEventViewTable = {
   _id: string;
   title: string;
   arena: string;

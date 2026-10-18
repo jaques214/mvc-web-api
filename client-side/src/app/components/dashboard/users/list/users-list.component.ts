@@ -2,6 +2,7 @@ import { tap, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { RestService } from '@services/rest.service';
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import {
   MatDialog,
@@ -65,12 +66,12 @@ type UserViewTable = {
   ],
 })
 export class ListUsersComponent implements OnInit {
-  title: string = 'Listagem';
+  title = 'Listagem';
   fields: FieldInput[] = userFields();
   collection: Schema = 'User';
   data$!: Observable<UserViewTable[]>;
   role$!: Observable<Role[]>;
-  role: string = 'Client';
+  role = 'Client';
 
   @ViewChild(MatTable) table!: MatTable<UserViewTable>;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -107,7 +108,7 @@ export class ListUsersComponent implements OnInit {
         users.map((user) => ({
           _id: user._id ?? crypto.randomUUID(),
           username: user.username,
-          permissions: user.role.value,
+          permissions: user.role?.value ?? '-',
           name: user.name,
         })),
       ),
@@ -118,7 +119,15 @@ export class ListUsersComponent implements OnInit {
         this.table.renderRows();
       }),
     );
-    this.data$.subscribe();
+    this.data$.subscribe({
+      error: (error: unknown) => {
+        console.error('Failed to load users:', error);
+        if (error instanceof HttpErrorResponse && error.status === 401) {
+          localStorage.removeItem('currentUser');
+          void this.router.navigate(['/login']);
+        }
+      },
+    });
   }
 
   applyFilter(user: KeyboardEvent) {

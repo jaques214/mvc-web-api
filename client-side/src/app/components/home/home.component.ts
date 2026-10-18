@@ -2,12 +2,12 @@ import { RestService } from '@services/rest.service';
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { API_ENDPOINT } from '@shared/index';
+import { API_ENDPOINT, formatSession } from '@shared/index';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import type { Schema, ShowroomEvent } from '@models/index';
+import type { FormattedSession, Schema, ShowroomEvent } from '@models/index';
 
 type HighlightEventViewTable = {
   _id: string;
@@ -15,7 +15,8 @@ type HighlightEventViewTable = {
   title: string;
   showroom: string;
   description: string;
-};
+  sessions: FormattedSession[];
+}
 
 @Component({
   selector: 'app-home',
@@ -70,6 +71,7 @@ export class HomeComponent implements OnInit {
             title: event.title,
             showroom: event.showroom ? event.showroom.name : '',
             description: event.description,
+            sessions: event.sessions.map(formatSession),
           })),
       ),
     );

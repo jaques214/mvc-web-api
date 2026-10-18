@@ -36,7 +36,7 @@ import type {
   Address,
 } from '@models/index';
 
-export interface EventViewTable {
+export type EventViewTable = {
   _id: string;
   title: string;
   arena: string;

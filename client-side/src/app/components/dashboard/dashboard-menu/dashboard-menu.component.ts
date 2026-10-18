@@ -1,8 +1,8 @@
-import { User } from '@models/users';
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
+import type { User } from '@models/index';
 
 @Component({
     selector: 'app-dashboard-menu',
@@ -24,7 +24,6 @@ export class DashboardMenuComponent implements OnInit {
       pathToList: '/dashboard/showrooms',
     },
   ];
-  constructor() {}
 
   ngOnInit(): void {
     const storedUser = localStorage.getItem('currentUser');
