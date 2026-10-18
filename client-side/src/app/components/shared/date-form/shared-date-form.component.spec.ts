@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 import { SharedDateFormComponent } from './shared-date-form.component';
 
@@ -8,7 +10,8 @@ describe('SharedDateFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SharedDateFormComponent ]
+      imports: [SharedDateFormComponent],
+      providers: [provideNativeDateAdapter()]
     })
     .compileComponents();
   });
@@ -16,6 +19,13 @@ describe('SharedDateFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SharedDateFormComponent);
     component = fixture.componentInstance;
+    component.dateFields = {
+      label: 'Date',
+      name: 'date',
+    };
+    component.form = new FormGroup({
+      date: new FormControl(''),
+    });
     fixture.detectChanges();
   });
 

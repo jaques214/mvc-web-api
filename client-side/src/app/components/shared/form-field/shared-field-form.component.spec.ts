@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { SharedFieldFormComponent } from './shared-field-form.component';
 
-describe('EventsDateFormComponent', () => {
+describe('SharedFieldFormComponent', () => {
   let component: SharedFieldFormComponent;
   let fixture: ComponentFixture<SharedFieldFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SharedFieldFormComponent ]
+      imports: [ SharedFieldFormComponent ]
     })
     .compileComponents();
   });
@@ -16,6 +17,14 @@ describe('EventsDateFormComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SharedFieldFormComponent);
     component = fixture.componentInstance;
+    component.input = {
+      label: 'Name',
+      name: 'name',
+      type: 'text',
+    };
+    component.form = new FormGroup({
+      name: new FormControl(''),
+    });
     fixture.detectChanges();
   });
 

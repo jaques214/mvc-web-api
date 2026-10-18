@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListEventsComponent } from './events-list.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ListEventsComponent', () => {
   let component: ListEventsComponent;
@@ -8,7 +9,8 @@ describe('ListEventsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListEventsComponent ]
+      imports: [ ListEventsComponent ],
+      providers: [provideHttpClient(withInterceptorsFromDi())]
     })
     .compileComponents();
   });

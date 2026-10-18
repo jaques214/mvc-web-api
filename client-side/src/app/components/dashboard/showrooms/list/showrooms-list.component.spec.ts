@@ -1,6 +1,9 @@
+/// <reference types="jasmine" />
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ListShowroomsComponent } from './showrooms-list.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
 describe('ListShowroomsComponent', () => {
   let component: ListShowroomsComponent;
@@ -8,7 +11,8 @@ describe('ListShowroomsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ListShowroomsComponent ]
+      imports: [ListShowroomsComponent],
+      providers: [provideHttpClient(withInterceptorsFromDi())]
     })
     .compileComponents();
   });

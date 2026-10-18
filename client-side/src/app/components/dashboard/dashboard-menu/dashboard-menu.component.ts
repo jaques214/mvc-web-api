@@ -11,7 +11,7 @@ import type { User } from '@models/index';
     imports: [MatCardModule, MatButtonModule, RouterModule],
 })
 export class DashboardMenuComponent implements OnInit {
-  user!: User;
+  user: User | null = null;
   menus = [
     {
       name: ' Events',
@@ -28,7 +28,9 @@ export class DashboardMenuComponent implements OnInit {
   ngOnInit(): void {
     const storedUser = localStorage.getItem('currentUser');
     this.user = storedUser ? JSON.parse(storedUser) : null;
-    if(this.user.role?.value == 'Admin') {
+    if(this.user === null) return;
+
+    if(this.user.role.value == 'Admin') {
       this.menus.push({
         name: 'Users',
         pathToAdd: '/dashboard/users/add',

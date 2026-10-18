@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FormEventsComponent } from './events-form.component';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { routes } from '@app/app.routes';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 describe('FormEventsComponent', () => {
   let component: FormEventsComponent;
@@ -8,7 +12,8 @@ describe('FormEventsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FormEventsComponent ]
+      imports: [ FormEventsComponent ],
+      providers: [provideNativeDateAdapter(), provideHttpClient(withInterceptorsFromDi()), provideRouter(routes)]
     })
     .compileComponents();
   });

@@ -16,8 +16,8 @@
         <input
           matInput
           type="time"
-          placeholder="timeFields.placeholder ?? ''"
-          formControlName="timeFields.inputs?.[1]?.name ?? ''"
+          [placeholder]="timeFields.placeholder ?? ''"
+          [formControlName]="timeFields.inputs?.[1]?.name ?? ''"
         />
       </span>
       </div>
@@ -32,8 +32,8 @@
       <input
         matInput
         type="time"
-        placeholder="timeFields.placeholder ?? ''"
-        formControlName="timeFields.name"
+        [placeholder]="timeFields.placeholder ?? ''"
+        [formControlName]="timeFields.name"
       />
       </div>
       <mat-icon matSuffix>access_time</mat-icon>

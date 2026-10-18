@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DashboardMenuComponent } from './dashboard-menu.component';
+import { provideRouter } from '@angular/router';
+import { routes } from '@app/app.routes';
 
 describe('DashboardMenuComponent', () => {
   let component: DashboardMenuComponent;
@@ -8,7 +10,8 @@ describe('DashboardMenuComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DashboardMenuComponent ]
+      imports: [ DashboardMenuComponent ],
+      providers: [provideRouter(routes)]
     })
     .compileComponents();
   });

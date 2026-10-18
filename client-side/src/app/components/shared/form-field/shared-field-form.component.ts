@@ -28,5 +28,5 @@ export class SharedFieldFormComponent {
     placeholder: '',
     inputs: [],
   };
-  @Input() form!: FormGroup;
+  @Input({ required: true }) form: FormGroup = new FormGroup({});
 }
