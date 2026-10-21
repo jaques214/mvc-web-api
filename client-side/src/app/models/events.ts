@@ -2,6 +2,7 @@ import type { Showroom } from './showrooms';
 import type { Ticket } from './tickets';
 
 export type SessionObj = {
+  _id?: string;
   date: Date;
   startTime: Date;
   endTime: Date;

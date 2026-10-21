@@ -3,10 +3,12 @@ import factoryCrudRouter from "./crudRouter";
 import permissions from "../utils/permissionsLevel";
 import { checkPermissionLevel, requireAuth } from "./auth";
 import authController, { auth } from "../controllers/auth";
+import Event from "../models/events";
 import Showroom from "../models/showrooms";
 import Address from "../models/address";
 import rateLimitMiddleware from "../utils/rateLimit";
 import { covidTestUpload, posterUpload } from "../utils/fileUpload";
+import { isValidObjectId } from "mongoose";
 
 const app = express();
 
@@ -64,6 +66,42 @@ const eventController =  async (req: Request, res: Response, next: NextFunction)
   return next()
 }
 
+const ticketController = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.file) {
+    res.status(400).json({ message: "A COVID test file is required" });
+    return;
+  }
+  if (typeof req.body.eventId !== "string" || !isValidObjectId(req.body.eventId)) {
+    res.status(400).json({ message: "A valid event identifier is required" });
+    return;
+  }
+  if (typeof req.body.sessionId !== "string") {
+    res.status(400).json({ message: "A session is required" });
+    return;
+  }
+
+  const event = await Event.findById(req.body.eventId);
+  if (!event) {
+    res.status(404).json({ message: "Event not found" });
+    return;
+  }
+  const session = event.sessions.find((candidate) => candidate._id.toString() === req.body.sessionId);
+  if (!session) {
+    res.status(400).json({ message: "Session does not belong to the selected event" });
+    return;
+  }
+
+  req.body.eventTitle = event.title;
+  req.body.session = {
+    sessionId: session._id.toString(),
+    date: session.date,
+    startTime: session.startTime,
+    endTime: session.endTime,
+  };
+  delete req.body.sessionId;
+  next();
+};
+
 app.use(
   "/events",
   factoryCrudRouter("events", {
@@ -84,6 +122,7 @@ app.use(
 app.use(
   "/tickets",
   factoryCrudRouter("tickets", {
+    create: [requireAuth, covidTestUpload, ticketController],
     remove: [requireAuth, checkPermissionLevel(permissions.promoter)],
     all: [requireAuth, checkPermissionLevel(permissions.promoter)],
     update: [requireAuth, checkPermissionLevel(permissions.promoter)],

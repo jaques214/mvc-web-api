@@ -1,10 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TicketsComponent } from './tickets.component';
-import {
-  provideHttpClient,
-  withInterceptorsFromDi,
-} from '@angular/common/http';
+import { RestService } from '@services/rest.service';
+import { of } from 'rxjs';
 import { provideRouter } from '@angular/router';
 import { routes } from '@app/app.routes';
 
@@ -15,7 +13,15 @@ describe('TicketsComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TicketsComponent],
-      providers: [provideHttpClient(withInterceptorsFromDi()), provideRouter(routes)],
+      providers: [
+        {
+          provide: RestService,
+          useValue: {
+            addCollection: () => of({}),
+          },
+        },
+        provideRouter(routes),
+      ],
     }).compileComponents();
   });
 

@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HomeComponent } from './home.component';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { RestService } from '@services/rest.service';
+import { of } from 'rxjs';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -10,7 +11,14 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ HomeComponent ],
-      providers: [provideHttpClient(withInterceptorsFromDi())]
+      providers: [
+        {
+          provide: RestService,
+          useValue: {
+            getAllCollections: () => of([]),
+          },
+        },
+      ]
     })
     .compileComponents();
   });

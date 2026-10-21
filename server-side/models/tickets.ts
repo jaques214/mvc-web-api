@@ -1,9 +1,22 @@
 import { model, Schema, type InferSchemaType, type HydratedDocument } from "mongoose";
 
+const ticketSessionSchema = new Schema({
+    sessionId: String,
+    date: Date,
+    startTime: Date,
+    endTime: Date,
+}, { _id: false });
+
 export const ticketsSchema = new Schema({
     nCancelled: Number,
     status: String,
+    eventId: String,
     eventTitle: String,
+    session: ticketSessionSchema,
+    covidTest: String,
+    price: Number,
+    type: Number,
+    paymentMethod: String,
     // paymentMethod: {
     //     type: String,
     //     enum: {

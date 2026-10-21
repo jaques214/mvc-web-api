@@ -6,6 +6,7 @@ export * from './tickets';
 export * from './users';
 
 export type FormattedSession = {
+  _id?: string;
   date: string;
   startTime: string;
   endTime: string;

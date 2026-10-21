@@ -19,7 +19,6 @@ import { ClientEventViewTable } from '../events/list/client-events-list.componen
 
 type SessionViewTable = FormattedSession & {
   viewValue: string;
-  optionValue: number;
 };
 
 @Component({
@@ -40,7 +39,7 @@ type SessionViewTable = FormattedSession & {
 export class TicketsComponent implements OnInit {
   event!: ClientEventViewTable;
   firstFormGroup = this._formBuilder.group({
-    session: [0, Validators.required],
+    session: [null as SessionViewTable | null, Validators.required],
     covidTest: ['', Validators.required],
   });
   secondFormGroup = this._formBuilder.group({
@@ -76,14 +75,13 @@ export class TicketsComponent implements OnInit {
     this.sessions = this.event.sessions
       .map((session, index) => ({
         ...session,
-        optionValue: index,
         viewValue: `Session ${index + 1}`,
       }));
   }
 
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
-      session: [0, Validators.required],
+      session: [null as SessionViewTable | null, Validators.required],
       covidTest: ['', Validators.required],
     });
     this.secondFormGroup = this._formBuilder.group({
@@ -93,19 +91,27 @@ export class TicketsComponent implements OnInit {
 
   onFileSelected(event: Event): void {
     const target: HTMLInputElement | null = event.target as HTMLInputElement;
-    this.fileSelected = target?.files?.[0] as File;
-    this.firstFormGroup.get('covidTest')?.setValue(this.fileSelected?.name);
+    this.fileSelected = target?.files?.[0];
+    this.firstFormGroup.get('covidTest')?.setValue(this.fileSelected?.name ?? '');
   }
 
   onBuy() {
     if (this.firstFormGroup.invalid || this.secondFormGroup.invalid) return;
-    if (!this.firstFormGroup.value || !this.secondFormGroup.value) return;
+    const session = this.firstFormGroup.value.session;
+    const covidTest = this.fileSelected;
+    if (!session || !covidTest) {
+      this.firstFormGroup.markAllAsTouched();
+      return;
+    }
+    if (!session._id) {
+      console.error('Selected session is missing its identifier.');
+      return;
+    }
 
     this.restService
       .addCollection<Ticket>(
         'Ticket',
         {
-          _id: crypto.randomUUID(),
           price: 0.0,
           status: 'pending',
           type:
@@ -113,12 +119,15 @@ export class TicketsComponent implements OnInit {
               ? TicketType.Single
               : TicketType.Family,
           paymentMethod: Method.Multibanco,
-          event: !this.firstFormGroup.value.session ? undefined : this.sessions[this.firstFormGroup.value.session].viewValue,
+          eventId: this.event._id,
+          sessionId: session._id,
+          saleDate: new Date(),
+          covidTest,
         },
         true,
       )
       .subscribe(() => {
         this.router.navigate(['/events']);
-      });
+      }, (error: unknown) => console.error('Failed to purchase ticket:', error));
   }
 }

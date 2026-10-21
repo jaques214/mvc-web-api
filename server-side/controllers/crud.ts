@@ -25,7 +25,9 @@ export default function factoryController(schema: SchemaName) {
             const file = req.file;
             if (file) {
                 delete body._id
-                const fileField = file.fieldname === 'covidTest' ? 'role.clientDetails.covidTest' : file.fieldname;
+                const fileField = schema === 'users' && file.fieldname === 'covidTest'
+                    ? 'role.clientDetails.covidTest'
+                    : file.fieldname;
                 await DB.create(schema, {...body, [fileField]: file.filename})
             } else {
                 await DB.create(schema, body)
@@ -43,7 +45,9 @@ export default function factoryController(schema: SchemaName) {
             const file = req.file;
             if (file) {
                 delete body._id
-                const fileField = file.fieldname === 'covidTest' ? 'role.clientDetails.covidTest' : file.fieldname;
+                const fileField = schema === 'users' && file.fieldname === 'covidTest'
+                    ? 'role.clientDetails.covidTest'
+                    : file.fieldname;
                 await DB.update(schema, {$set: {...body, [fileField]: file.filename}}, key)
             } else {
                 await DB.update(schema, {$set: body}, key);

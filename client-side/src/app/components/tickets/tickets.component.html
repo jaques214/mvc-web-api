@@ -26,7 +26,7 @@
         <mat-select formControlName="session" required>
           <mat-option>None</mat-option>
           @for (session of sessions; track session) {
-            <mat-option [value]="session.optionValue">
+            <mat-option [value]="session">
               {{ session.viewValue }}
             </mat-option>
           }

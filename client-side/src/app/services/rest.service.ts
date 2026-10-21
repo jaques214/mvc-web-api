@@ -74,8 +74,12 @@ export class RestService {
     const form = new FormData();
     const entries = Object.entries(data) as [string, TData[keyof TData]][];
     for (const [key, field] of entries) {
-      const value = typeof field === 'object' ? JSON.stringify(field) : field;
-      form.append(key, String(value));
+      if (field instanceof Blob) {
+        form.append(key, field);
+      } else {
+        const value = typeof field === 'object' ? JSON.stringify(field) : field;
+        form.append(key, String(value));
+      }
     }
     return form;
   }

@@ -15,11 +15,21 @@ export enum TicketType {
 
 export type Ticket = {
     _id?: string;
+    eventId?: string;
+    eventTitle?: string;
+    session?: {
+        sessionId: string;
+        date: Date | string;
+        startTime: Date | string;
+        endTime: Date | string;
+    };
+    sessionId?: string;
+    covidTest?: File | string;
     price?: number;
     status?: string;
     type?: TicketType;
     paymentMethod?: Method;
-    event?: string;
+    saleDate?: Date;
 }
 
 export const ticketFields = () => [

@@ -8,6 +8,7 @@ export function normalizeImageName(imagePath: string): string {
 
 export function formatSession(session: SessionObj): FormattedSession {
   return {
+    _id: session._id,
     date: formatDate(session.date),
     startTime: formatTime(session.startTime),
     endTime: formatTime(session.endTime),
