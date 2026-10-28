@@ -1,0 +1,73 @@
+@import url(https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.min.css);
+
+.widget {
+  font-family: "Poiret One", sans-serif;
+  justify-content: flex-end;
+  margin: 20px 0;
+  font-weight: 400;
+  font-style: normal;
+  display: flex;
+  height: 200px;
+  width: 400px;
+  flex-wrap: wrap;
+  border-radius: 20px;
+  box-shadow: 0 27px 55px 0 rgba(0, 0, 0, 0.3), 0 17px 17px 0 rgba(0, 0, 0, 0.15);
+}
+.widget .weatherIcon {
+  padding: 20px 0;
+  flex: 1 100%;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  background: #FAFAFA;
+  font-family: weathericons;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  font-size: 86px;
+}
+.widget .weatherInfo {
+  flex: 1 0 70%;
+  padding: 0 5px;
+  background: #080705;
+  border-bottom-left-radius: 20px;
+  display: flex;
+  align-items: stretch;
+  color: white;
+}
+.widget .weatherInfo .temperature {
+  flex: 0 0 40%;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  font-size: 65px;
+}
+.widget .weatherInfo .description {
+  padding: 10px 0;
+  flex: 0 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.widget .weatherInfo .description .weatherCondition {
+  font-family: "Poiret One", sans-serif;
+  text-transform: uppercase;
+  font-size: 24px;
+  font-weight: 100;
+  margin-bottom: 3px;
+}
+.widget .weatherInfo .description .place {
+  font-size: 12px;
+  margin: 0;
+}
+.widget .date {
+  flex: 1 0 30%;
+  background: #70C1B3;
+  border-bottom-right-radius: 20px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  font-size: 30px;
+  font-weight: 800;
+}

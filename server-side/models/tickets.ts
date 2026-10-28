@@ -16,14 +16,13 @@ export const ticketsSchema = new Schema({
     covidTest: String,
     price: Number,
     type: Number,
-    paymentMethod: String,
-    // paymentMethod: {
-    //     type: String,
-    //     enum: {
-    //         values: ['PayPal', 'Transferência Bancária', 'VISA', 'Cartão de Crédito', 'MBWAY', 'Dinheiro', 'Multibanco'],
-    //         message: '{VALUE} is not supported'
-    //     }
-    // },
+    paymentMethod: {
+        type: String,
+        enum: {
+            values: ['PayPal', 'Transferência Bancária', 'VISA', 'Cartão de Crédito', 'MBWAY', 'Dinheiro', 'Multibanco'],
+            message: '{VALUE} is not supported'
+        }
+    },
     saleDate: Date
 });
 

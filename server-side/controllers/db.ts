@@ -40,7 +40,7 @@ function create<T extends SchemaName>(schemaName: T, body: Parameters<SchemaMode
 async function update(schemaName: SchemaName, body: UpdateQuery<SchemaDocument>, key: string) {
     const Schema = operationCollection(schemaName);
     await Schema.findByIdAndUpdate(key, body);
-    console.log('Updated Successfully');
+    console.info('Updated Successfully');
 }
 
 async function deleteRecord(schemaName: SchemaName, key: string) {

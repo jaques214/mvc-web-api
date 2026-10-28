@@ -20,6 +20,10 @@ export const addressSchema = new Schema({
         },
         required: [true, 'Postal-code is mandatory!']
     },
+    city: {
+        type: String,
+        required: [true, 'City is mandatory!']
+    },
     country: {
         type: String,
         required: [true, 'Country is mandatory!']

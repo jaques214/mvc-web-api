@@ -77,6 +77,10 @@
         ></tr>
       </table>
 
+      @if (event && selection.size > 0) {
+        <app-weather-widget [event]="event" [selectedSessionID]="selection.values().next().value?._id" />
+      }
+
       <div class="file-upload">
         <input
           [hidden]="true"

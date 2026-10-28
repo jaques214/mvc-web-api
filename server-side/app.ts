@@ -27,7 +27,6 @@ import { xss } from 'express-xss-sanitizer'
 import { ipKeyGenerator, rateLimit } from 'express-rate-limit'
 
 const __dirname = new URL('./', import.meta.url).pathname.slice(1);
-console.log('dirname ', __dirname);
 
 const app: Express = express();
 

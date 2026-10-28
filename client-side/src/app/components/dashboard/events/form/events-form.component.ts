@@ -31,6 +31,7 @@ import {
   sessionFields,
 } from '@models/index';
 import { EventViewTable } from '../list/events-list.component';
+import { WeatherWidgetComponent } from '@components/weather-widget/weather-widget.component';
 
 @Component({
   selector: 'app-events-form',
@@ -45,7 +46,8 @@ import { EventViewTable } from '../list/events-list.component';
     SharedFieldFormComponent,
     MatTableModule,
     ReactiveFormsModule,
-  ],
+    WeatherWidgetComponent
+],
 })
 export class FormEventsComponent implements OnInit {
   title = 'New Event';
